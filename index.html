@@ -1,0 +1,53 @@
+<!doctype html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>MoFA Bahrain — House Management</title>
+<link rel="stylesheet" href="public/tokens.css"/>
+<link rel="stylesheet" href="public/app.css"/>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+window.THREE = THREE;
+window.OrbitControls = OrbitControls;
+window.dispatchEvent(new Event('three-ready'));
+</script>
+
+<script type="text/babel" src="src/i18n.jsx"></script>
+<script type="text/babel" src="src/data.jsx"></script>
+<script type="text/babel" src="src/data-postings.jsx"></script>
+<script type="text/babel" src="src/data-floors.jsx"></script>
+<script type="text/babel" src="src/data-assets-extended.jsx"></script>
+<script type="text/babel" src="src/data-gifts.jsx"></script>
+<script type="text/babel" src="src/data-maintenance.jsx"></script>
+<script type="text/babel" src="src/lib-permissions.jsx"></script>
+<script type="text/babel" src="src/lib-role-context.jsx"></script>
+<script type="text/babel" src="src/icons.jsx"></script>
+<script type="text/babel" src="src/three-kit.jsx"></script>
+<script type="text/babel" src="src/three-scenes.jsx"></script>
+<script type="text/babel" src="src/shell.jsx"></script>
+<script type="text/babel" src="src/screens-core.jsx"></script>
+<script type="text/babel" src="src/screens-room.jsx"></script>
+<script type="text/babel" src="src/screens-handover.jsx"></script>
+<script type="text/babel" src="src/screens-stub.jsx"></script>
+<script type="text/babel" src="src/app.jsx"></script>
+</body>
+</html>

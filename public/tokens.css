@@ -1,0 +1,248 @@
+/* =============================================================
+ * MoFA Bahrain Design System — Tokens
+ * Diplomatic premium. Forest + brass on cream.
+ * ============================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300..700;1,300..700&family=Inter:wght@300..700&family=Tajawal:wght@300;400;500;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap");
+
+:root {
+  /* ---------- Color — base palette ---------- */
+  --forest:           #1B2845;   /* primary */
+  --forest-deep:      #0F1A33;   /* primary hover */
+  --forest-soft:      #2C3A5C;   /* primary muted */
+  --brass:            #B89154;   /* accent */
+  --brass-deep:       #957039;   /* accent hover */
+  --brass-soft:       #D9C39B;   /* accent muted */
+
+  --cream-page:       #FAF6EE;   /* default canvas */
+  --cream-panel:      #F5EFE2;   /* sidebars / hover rows */
+  --cream-deep:       #ECE2CB;   /* pressed / active panel */
+  --ink:              #1A1A17;   /* body text */
+  --ink-soft:         #4A463E;   /* secondary text */
+  --ink-faint:        #807B6F;   /* tertiary, captions */
+
+  /* ---------- Color — semantic (muted) ---------- */
+  --positive:         #3E4D70;   /* desaturated forest */
+  --positive-tint:    #DCE7DD;
+  --warning:          #B07A2A;   /* ochre */
+  --warning-tint:     #F0E3CB;
+  --critical:         #8C3A2E;   /* clay red */
+  --critical-tint:    #ECD6CF;
+  --info:             #3A5570;   /* slate blue */
+  --info-tint:        #D8DEE7;
+
+  /* ---------- Color — semantic (functional) ---------- */
+  --bg:               var(--cream-page);
+  --bg-panel:         var(--cream-panel);
+  --bg-elevated:      #FFFFFF;          /* used very sparingly — modal sheets */
+  --fg:               var(--ink);
+  --fg-muted:         var(--ink-soft);
+  --fg-faint:         var(--ink-faint);
+  --fg-on-forest:     var(--cream-page);
+  --fg-on-brass:      var(--cream-page);
+
+  --border-hair:      rgba(184, 145, 84, 0.32);   /* primary hairline */
+  --border-faint:     rgba(184, 145, 84, 0.18);   /* table dividers */
+  --border-strong:    rgba(27, 40, 69, 0.45);     /* focused / selected */
+
+  /* ---------- Type — families ---------- */
+  --font-serif:        "Playfair Display", "Times New Roman", Georgia, serif;
+  --font-sans:         "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-arabic-display: "Tajawal", "Playfair Display", serif;
+  --font-arabic-body:    "IBM Plex Sans Arabic", "Tajawal", sans-serif;
+  --font-mono:         "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+
+  /* ---------- Type — scale ---------- */
+  --fs-display:       72px;   /* hero stats, login title */
+  --fs-h1:            40px;
+  --fs-h2:            32px;
+  --fs-h3:            24px;
+  --fs-h4:            20px;
+  --fs-body:          15px;   /* default body */
+  --fs-small:         13px;
+  --fs-label:         11px;   /* small-caps labels */
+  --fs-mono:          13px;
+
+  --lh-tight:         1.2;
+  --lh-snug:          1.35;
+  --lh-body:          1.65;
+  --lh-loose:         1.8;
+
+  --ls-label:         0.12em;   /* small caps */
+  --ls-tight:         -0.01em;
+  --ls-display:       -0.015em;
+
+  /* ---------- Spacing — 4px grid ---------- */
+  --space-0:          0;
+  --space-1:          4px;
+  --space-2:          8px;
+  --space-3:          12px;
+  --space-4:          16px;
+  --space-5:          20px;
+  --space-6:          24px;
+  --space-8:          32px;
+  --space-10:         40px;
+  --space-12:         48px;
+  --space-16:         64px;
+  --space-20:         80px;
+  --space-24:         96px;
+
+  /* ---------- Radii ---------- */
+  --radius-button:    6px;
+  --radius-input:     6px;
+  --radius-card:      12px;
+  --radius-pill:      999px;
+  --radius-none:      0;
+
+  /* ---------- Borders ---------- */
+  --border-1:         1px solid var(--border-hair);
+  --border-faint-1:   1px solid var(--border-faint);
+  --border-focus:     1.5px solid var(--forest);
+
+  /* ---------- Elevation — there is no elevation ----------
+   * No shadows are used in this system.
+   * Use border + background tone shift instead. */
+  --shadow-none:      none;
+
+  /* ---------- Motion ---------- */
+  --ease:             cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-quick:        180ms;
+  --dur-normal:       280ms;
+  --dur-slow:         400ms;
+
+  /* ---------- Layout ---------- */
+  --container-max:    1440px;
+  --sidebar-w:        260px;
+  --topbar-h:         64px;
+  --row-h:            44px;        /* dense ledger row */
+  --row-h-comfy:      56px;        /* default row */
+}
+
+/* =============================================================
+ * Base — page reset + defaults
+ * ============================================================= */
+
+html { color-scheme: light only; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-feature-settings: "ss01", "cv11", "tnum";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* RTL — Arabic primary */
+html[dir="rtl"] body,
+[dir="rtl"] {
+  font-family: var(--font-arabic-body);
+}
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4,
+[dir="rtl"] .display, [dir="rtl"] .stat-num {
+  font-family: var(--font-arabic-display);
+}
+
+/* =============================================================
+ * Type — semantic vars
+ * ============================================================= */
+
+h1, .h1 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--fs-h1);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-display);
+  margin: 0;
+}
+h2, .h2 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--fs-h2);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-display);
+  margin: 0;
+}
+h3, .h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--fs-h3);
+  line-height: var(--lh-snug);
+  margin: 0;
+}
+h4, .h4 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--fs-h4);
+  line-height: var(--lh-snug);
+  margin: 0;
+}
+
+.display {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: var(--fs-display);
+  line-height: 1;
+  letter-spacing: var(--ls-display);
+}
+
+.stat-num {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: 56px;
+  line-height: 1;
+  letter-spacing: var(--ls-display);
+  font-variant-numeric: tabular-nums;
+  color: var(--forest);
+}
+
+p, .p {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  margin: 0 0 var(--space-4) 0;
+  color: var(--fg);
+}
+
+small, .small {
+  font-size: var(--fs-small);
+  line-height: var(--lh-snug);
+  color: var(--fg-muted);
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label);
+  color: var(--brass-deep);
+}
+
+code, .mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  background: var(--cream-panel);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur-quick) var(--ease);
+}
+a:hover { border-bottom-color: var(--brass); }
+
+/* Selection */
+::selection { background: var(--brass-soft); color: var(--ink); }
+
+/* Hide scrollbar chrome but allow scroll — used in tight panels */
+.scroll-clean::-webkit-scrollbar { width: 6px; height: 6px; }
+.scroll-clean::-webkit-scrollbar-thumb {
+  background: var(--border-hair);
+  border-radius: 3px;
+}
