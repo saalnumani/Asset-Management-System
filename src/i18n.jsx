@@ -6,8 +6,8 @@
 
 const MESSAGES = {
   ar: {
-    app_name: "إدارة دار البحرين",
-    eyebrow: "نظام داخلي · وزارة الخارجية",
+    app_name: "نظام إدارة المنزل",
+    eyebrow: "مملكة البحرين · وزارة الخارجية",
     search_placeholder: "بحث في النظام…",
 
     // Top bar
@@ -166,6 +166,8 @@ const MESSAGES = {
     role_hq_admin: "إدارة عامة — المنامة",
     role_embassy_admin: "مدير سفارة",
     role_embassy_staff: "موظف سفارة",
+    current_authority: "الصلاحية الحالية",
+    posting_label: "المقر · القسم",
     persona_disclaimer: "في النظام الحقيقي تُحدَّد الصلاحية تلقائياً عند تسجيل الدخول. هذا المبدّل مخصص للاطّلاع على الواجهة فقط.",
   },
   en: {
@@ -313,6 +315,8 @@ const MESSAGES = {
     cancel: "Cancel",
     close: "Close",
 
+    current_authority: "Current Role",
+    posting_label: "Posting · Department",
     switch_role: "Switch role (demo only)",
     demo_only: "Demo only",
     role_hq_admin: "HQ Admin · Manama",

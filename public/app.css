@@ -6,7 +6,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
 body {
-  background: var(--cream-page);
+  background: var(--bg);
   overflow-x: hidden;
 }
 button, input, select, textarea {
@@ -37,7 +37,7 @@ button:focus-visible, input:focus-visible, a:focus-visible, [role="button"]:focu
 [dir="ltr"] .app-shell { grid-template-columns: var(--sidebar-w) 1fr; }
 
 .main {
-  background: var(--cream-page);
+  background: var(--bg);
   min-width: 0;
   overflow-x: hidden;
 }
@@ -45,8 +45,8 @@ button:focus-visible, input:focus-visible, a:focus-visible, [role="button"]:focu
 /* ---------- Top bar ---------- */
 .topbar {
   height: var(--topbar-h);
-  background: var(--cream-page);
-  border-bottom: 1px solid var(--border-faint);
+  background: var(--forest);
+  border-bottom: 1px solid var(--forest-deep);
   display: flex; align-items: center;
   padding-inline: 24px; gap: 16px;
   position: sticky; top: 0; z-index: 30;
@@ -54,17 +54,17 @@ button:focus-visible, input:focus-visible, a:focus-visible, [role="button"]:focu
 .topbar .brand {
   display: flex; align-items: center; gap: 14px;
   text-decoration: none;
-  color: var(--ink);
+  color: var(--fg-on-forest);
 }
 .topbar .brand img { height: 38px; display: block; }
-.topbar .brand .vline { width: 1px; height: 28px; background: var(--border-hair); }
+.topbar .brand .vline { width: 1px; height: 28px; background: rgba(247, 248, 250, 0.25); }
 .topbar .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
 .topbar .brand-eyebrow {
-  font-size: 9.5px; letter-spacing: .14em; color: var(--brass-deep);
+  font-size: 9.5px; letter-spacing: .14em; color: var(--brass);
   text-transform: uppercase; font-weight: 500;
 }
 .topbar .brand-name {
-  font-family: var(--font-serif); font-size: 16px; color: var(--ink);
+  font-family: var(--font-serif); font-size: 16px; color: var(--fg-on-forest);
   margin-top: 2px; font-weight: 400;
 }
 [dir="rtl"] .topbar .brand-name { font-family: var(--font-arabic-display); }
@@ -96,6 +96,15 @@ button:focus-visible, input:focus-visible, a:focus-visible, [role="button"]:focu
   width: 100%; color: var(--ink); font-size: 13px;
 }
 
+.topbar .icon-btn {
+  background: transparent;
+  border: 1px solid rgba(247, 248, 250, 0.22);
+  border-radius: 6px;
+  width: 38px; height: 38px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--fg-on-forest); transition: all 180ms var(--ease);
+}
+.topbar .icon-btn:hover { background: rgba(247, 248, 250, 0.12); border-color: var(--brass); }
 .icon-btn {
   background: transparent;
   border: 1px solid var(--border-hair);
@@ -109,6 +118,11 @@ button:focus-visible, input:focus-visible, a:focus-visible, [role="button"]:focu
 .icon-btn--ghost { border-color: transparent; }
 .icon-btn--ghost:hover { background: var(--cream-panel); border-color: var(--border-hair); }
 
+.topbar .lang-toggle {
+  border: 1px solid rgba(247, 248, 250, 0.22);
+  color: var(--fg-on-forest);
+}
+.topbar .lang-toggle:hover { background: rgba(247, 248, 250, 0.12); border-color: var(--brass); }
 .lang-toggle {
   display: inline-flex; align-items: center; gap: 8px;
   background: transparent;
@@ -118,6 +132,9 @@ button:focus-visible, input:focus-visible, a:focus-visible, [role="button"]:focu
 }
 .lang-toggle:hover { background: var(--cream-panel); border-color: var(--brass); }
 
+.topbar .user-chip { border-color: rgba(247, 248, 250, 0.22) !important; }
+.topbar .user-chip .name { color: var(--fg-on-forest); }
+.topbar .user-chip .role { color: rgba(247, 248, 250, 0.7); }
 .user-chip {
   display: inline-flex; align-items: center; gap: 10px;
   padding: 0; padding-inline-start: 4px;
@@ -137,8 +154,8 @@ button:focus-visible, input:focus-visible, a:focus-visible, [role="button"]:focu
 
 /* ---------- Sidebar ---------- */
 .sidebar {
-  background: var(--cream-panel);
-  border-inline-end: 1px solid var(--border-hair);
+  background: var(--forest);
+  border-inline-end: 1px solid var(--forest-deep);
   padding: 20px 12px 24px;
   display: flex; flex-direction: column; gap: 6px;
   position: sticky; top: var(--topbar-h);
@@ -150,16 +167,17 @@ button:focus-visible, input:focus-visible, a:focus-visible, [role="button"]:focu
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: .14em;
-  color: var(--brass-deep);
+  color: var(--brass);
   padding: 14px 14px 6px;
 }
+.sidebar .nav-item svg { color: var(--brass) !important; }
 .sidebar-section:first-child { padding-top: 4px; }
 
 .nav-item {
   display: flex; align-items: center; gap: 12px;
   padding: 9px 12px;
   font-size: 13.5px;
-  color: var(--ink-soft);
+  color: rgba(244, 246, 249, 0.74);
   border-radius: 6px;
   background: transparent;
   border: 1px solid transparent;
@@ -168,11 +186,11 @@ button:focus-visible, input:focus-visible, a:focus-visible, [role="button"]:focu
   transition: all 180ms var(--ease);
   position: relative;
 }
-.nav-item:hover { background: var(--cream-page); color: var(--ink); }
+.nav-item:hover { background: var(--forest-soft); color: #fff; }
 .nav-item.active {
-  background: var(--cream-page);
-  color: var(--ink);
-  border-color: var(--border-hair);
+  background: var(--forest-soft);
+  color: #fff;
+  border-color: transparent;
   font-weight: 500;
   box-shadow: inset 2px 0 0 0 var(--brass);
 }
@@ -181,7 +199,7 @@ button:focus-visible, input:focus-visible, a:focus-visible, [role="button"]:focu
   margin-inline-start: auto;
   font-size: 11px; padding: 1px 7px; border-radius: 999px;
   background: var(--brass);
-  color: var(--cream-page);
+  color: var(--forest-deep);
   font-weight: 500; letter-spacing: .04em;
 }
 .nav-item .dot {
@@ -243,7 +261,7 @@ button:focus-visible, input:focus-visible, a:focus-visible, [role="button"]:focu
 }
 .btn--primary { background: var(--forest); color: var(--cream-page); }
 .btn--primary:hover { background: var(--forest-deep); }
-.btn--brass { background: var(--brass); color: var(--cream-page); }
+.btn--brass { background: var(--brass); color: var(--fg-on-brass); }
 .btn--brass:hover { background: var(--brass-deep); }
 .btn--secondary { border-color: var(--border-hair); }
 .btn--secondary:hover { background: var(--cream-panel); border-color: var(--brass); }
@@ -354,7 +372,7 @@ button:focus-visible, input:focus-visible, a:focus-visible, [role="button"]:focu
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: linear-gradient(180deg, #0E2418 0%, #0E3A2E 100%);
+  background: linear-gradient(180deg, #1E2A3D 0%, #3D4F6B 100%);
 }
 .three-wrap--cream { background: var(--cream-panel); }
 .three-wrap canvas { display: block; width: 100%; height: 100%; }

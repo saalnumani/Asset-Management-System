@@ -6,44 +6,44 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300..700;1,300..700&family=Inter:wght@300..700&family=Tajawal:wght@300;400;500;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap");
 
 :root {
-  /* ---------- Color — base palette ---------- */
-  --forest:           #1B2845;   /* primary */
-  --forest-deep:      #0F1A33;   /* primary hover */
-  --forest-soft:      #2C3A5C;   /* primary muted */
-  --brass:            #B89154;   /* accent */
-  --brass-deep:       #957039;   /* accent hover */
-  --brass-soft:       #D9C39B;   /* accent muted */
+  /* ---------- Color — base palette (PMS slate + gold) ---------- */
+  --forest:           #3D4F6B;   /* slate blue — primary / structural */
+  --forest-deep:      #2E3D54;   /* darker slate — hover / headers */
+  --forest-soft:      #51678C;   /* mid slate — accents / sidebar hover */
+  --brass:            #D8BB87;   /* gold — accent / primary highlight */
+  --brass-deep:       #9A742F;   /* deep gold — label text / icons */
+  --brass-soft:       #E8D5B0;   /* light gold — subtle highlights */
 
-  --cream-page:       #FAF6EE;   /* default canvas */
-  --cream-panel:      #F5EFE2;   /* sidebars / hover rows */
-  --cream-deep:       #ECE2CB;   /* pressed / active panel */
-  --ink:              #1A1A17;   /* body text */
-  --ink-soft:         #4A463E;   /* secondary text */
-  --ink-faint:        #807B6F;   /* tertiary, captions */
+  --cream-page:       #FAFAF9;   /* card / panel surface (near white) */
+  --cream-panel:      #EFEFEC;   /* hover rows / inset panels (light gray) */
+  --cream-deep:       #E2E2DD;   /* pressed / progress track */
+  --ink:              #29384F;   /* body text — deep slate */
+  --ink-soft:         #51607A;   /* secondary text */
+  --ink-faint:        #8893A6;   /* tertiary, captions */
 
   /* ---------- Color — semantic (muted) ---------- */
-  --positive:         #3E4D70;   /* desaturated forest */
-  --positive-tint:    #DCE7DD;
-  --warning:          #B07A2A;   /* ochre */
-  --warning-tint:     #F0E3CB;
-  --critical:         #8C3A2E;   /* clay red */
-  --critical-tint:    #ECD6CF;
-  --info:             #3A5570;   /* slate blue */
-  --info-tint:        #D8DEE7;
+  --positive:         #3D5A7A;   /* slate (palette has no green) */
+  --positive-tint:    #E4E9F0;
+  --warning:          #A8761F;   /* deep gold-ochre */
+  --warning-tint:     #F2E7D0;
+  --critical:         #993A33;   /* brick red — secondary / destructive */
+  --critical-tint:    #F0DCD9;
+  --info:             #3D5772;   /* slate blue */
+  --info-tint:        #DFE5EC;
 
   /* ---------- Color — semantic (functional) ---------- */
-  --bg:               var(--cream-page);
+  --bg:               #F0F1F2;          /* page canvas — neutral light gray */
   --bg-panel:         var(--cream-panel);
   --bg-elevated:      #FFFFFF;          /* used very sparingly — modal sheets */
   --fg:               var(--ink);
   --fg-muted:         var(--ink-soft);
   --fg-faint:         var(--ink-faint);
-  --fg-on-forest:     var(--cream-page);
-  --fg-on-brass:      var(--cream-page);
+  --fg-on-forest:     #F7F8FA;          /* light text on slate */
+  --fg-on-brass:      #36301C;          /* deep text on gold — readable */
 
-  --border-hair:      rgba(184, 145, 84, 0.32);   /* primary hairline */
-  --border-faint:     rgba(184, 145, 84, 0.18);   /* table dividers */
-  --border-strong:    rgba(27, 40, 69, 0.45);     /* focused / selected */
+  --border-hair:      rgba(150, 124, 78, 0.32);   /* gold hairline */
+  --border-faint:     rgba(150, 124, 78, 0.17);   /* table dividers */
+  --border-strong:    rgba(61, 79, 107, 0.45);    /* focused / selected */
 
   /* ---------- Type — families ---------- */
   --font-serif:        "Playfair Display", "Times New Roman", Georgia, serif;

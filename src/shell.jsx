@@ -38,14 +38,14 @@ function useRoute() {
 // TopBar
 // =============================================================
 function TopBar({ lang, setLang, activePropId, setActivePropId }) {
-  const [propMenu, setPropMenu] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [roleMenu, setRoleMenu] = useState(false);
   const { user } = useCurrentRole();
-  const activeProp = getProperty(activePropId);
   return (
     <header className="topbar">
-      <a className="brand" href="#/dashboard" onClick={() => navigate("/dashboard")}>
-        <CrestMark />
+      <a className="brand" href="#/dashboard" onClick={() => navigate("/dashboard")}
+        style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}>
+        <img src="public/assets/mofa-logo.svg" alt="MoFA" style={{ height: 40, display: "block" }} />
         <div className="vline" />
         <div className="brand-text">
           <span className="brand-eyebrow">{t("eyebrow", lang)}</span>
@@ -55,33 +55,22 @@ function TopBar({ lang, setLang, activePropId, setActivePropId }) {
 
       <div className="spacer" />
 
-      {/* Property selector */}
+      {/* Search — popup */}
       <div style={{ position: "relative" }}>
-        <button className="prop-selector" onClick={() => setPropMenu(v => !v)}>
-          <Icon name="building" size={16} style={{ color: "var(--brass-deep)" }} />
-          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.15, alignItems: "flex-start" }}>
-            <span className="label" style={{ fontSize: 9 }}>{t("select_property", lang)}</span>
-            <b style={{ fontSize: 13 }}>{activeProp.city[lang]} · {activeProp.country[lang]}</b>
-          </div>
-          <Icon name="chevron_down" size={14} style={{ color: "var(--ink-faint)", marginInlineStart: 8 }} />
+        <button className="icon-btn icon-btn--round" title={t("search_placeholder", lang)}
+          onClick={() => setSearchOpen(v => !v)}>
+          <Icon name="search" size={18} />
         </button>
-        {propMenu && (
-          <div style={{ position: "absolute", top: 46, insetInlineEnd: 0, background: "var(--cream-page)", border: "1px solid var(--border-hair)", borderRadius: 8, minWidth: 320, zIndex: 50, padding: 8 }}>
-            {PROPERTIES.map(p => (
-              <button key={p.id}
-                onClick={() => { setActivePropId(p.id); setPropMenu(false); }}
-                style={{ display: "block", width: "100%", textAlign: "start", padding: "10px 12px", border: 0, background: p.id === activePropId ? "var(--cream-panel)" : "transparent", borderRadius: 6, marginBottom: 2 }}>
-                <div style={{ fontSize: 13, fontWeight: 500 }}>{p.city[lang]}</div>
-                <div style={{ fontSize: 11, color: "var(--ink-faint)" }}>{p.country[lang]} · {p.totalAssetsCount} {t("assets", lang)}</div>
-              </button>
-            ))}
+        {searchOpen && (
+          <div style={{ position: "absolute", top: 54, insetInlineEnd: 0, background: "var(--cream-page)",
+              border: "1px solid var(--border-hair)", borderRadius: 12, width: 360, zIndex: 55, padding: 10 }}>
+            <div className="search-input" style={{ width: "100%" }}>
+              <Icon name="search" size={16} />
+              <input autoFocus placeholder={t("search_placeholder", lang)}
+                onKeyDown={e => { if (e.key === "Escape") setSearchOpen(false); }} />
+            </div>
           </div>
         )}
-      </div>
-
-      <div className="search-input">
-        <Icon name="search" size={16} />
-        <input placeholder={t("search_placeholder", lang)} />
       </div>
 
       <button className="lang-toggle" onClick={() => setLang(lang === "ar" ? "en" : "ar")}>
@@ -97,57 +86,99 @@ function TopBar({ lang, setLang, activePropId, setActivePropId }) {
       {/* Role switcher (demo only) — between bell and avatar */}
       <div style={{ position: "relative" }}>
         <button
-          className="user-chip"
-          title={t("switch_role", lang)}
+          className="icon-btn icon-btn--round"
+          title={t("profile", lang)}
           onClick={() => setRoleMenu(v => !v)}
-          style={{ cursor: "pointer", padding: "4px 8px 4px 12px", background: "transparent", border: "1px solid var(--border-hair)" }}
+          style={{ cursor: "pointer" }}
         >
-          <div className="who" style={{ alignItems: lang === "ar" ? "flex-end" : "flex-start" }}>
-            <span className="name" style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              {user.name[lang]}
-              <span style={{ fontSize: 8.5, letterSpacing: "0.1em", textTransform: "uppercase",
-                color: "var(--brass-deep)", border: "1px solid var(--border-hair)", padding: "1px 5px",
-                borderRadius: 3, fontWeight: 500 }}>{t("demo_only", lang)}</span>
-            </span>
-            <span className="role">{user.titleShort ? user.titleShort[lang] : t(`role_${user.role.replace("-", "_")}`, lang)}</span>
-          </div>
-          <div className="avatar">{user.initial}</div>
+          <Icon name="user" size={18} />
         </button>
-        {roleMenu && (
-          <div style={{ position: "absolute", top: 52, insetInlineEnd: 0,
-              background: "var(--cream-page)", border: "1px solid var(--border-hair)",
-              borderRadius: 10, minWidth: 320, zIndex: 60, padding: 10 }}>
-            <div style={{ padding: "6px 10px 10px", borderBottom: "1px solid var(--border-hair)", marginBottom: 6 }}>
-              <div className="label" style={{ marginBottom: 4 }}>{t("switch_role", lang)}</div>
-              <div style={{ fontSize: 11, color: "var(--ink-faint)", lineHeight: 1.5 }}>
-                {t("persona_disclaimer", lang)}
+        {roleMenu && (() => {
+          const titleRaw = (user.titleShort && user.titleShort[lang])
+            || t(`role_${user.role.replace("-", "_")}`, lang);
+          const segs = titleRaw.split(/\s*[·—–-]\s*/);
+          const roleLabel = segs[0] || titleRaw;
+          const postingLabel = segs.slice(1).join(" · ")
+            || (user.postingId ? getPosting(user.postingId)?.city[lang] : (lang === "ar" ? "المقر الرئيسي · المنامة" : "Headquarters · Manama"));
+          const divider = <div style={{ height: 1, background: "rgba(247,248,250,0.10)" }} />;
+          const eyebrow = (txt) => (
+            <div style={{ fontSize: 9.5, letterSpacing: "0.13em", textTransform: "uppercase",
+              color: "rgba(247,248,250,0.42)", fontWeight: 500 }}>{txt}</div>
+          );
+          return (
+            <div style={{ position: "absolute", top: 54, insetInlineEnd: 0,
+                background: "var(--forest-deep)", border: "1px solid rgba(247,248,250,0.12)",
+                borderRadius: 14, minWidth: 312, zIndex: 60, overflow: "hidden",
+                color: "var(--fg-on-forest)" }}>
+              {/* Identity header */}
+              <div style={{ display: "flex", gap: 14, alignItems: "center", padding: "18px 18px 16px" }}>
+                <div style={{ width: 54, height: 54, borderRadius: "50%", background: "var(--brass)",
+                  color: "var(--ink)", display: "grid", placeItems: "center",
+                  fontFamily: "var(--font-serif)", fontSize: 22, flexShrink: 0 }}>{user.initial}</div>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: 15, fontWeight: 600, lineHeight: 1.3 }}>{user.name[lang]}</div>
+                  <div style={{ fontSize: 12, color: "rgba(247,248,250,0.55)", marginTop: 2,
+                    fontFamily: "var(--font-mono)", direction: "ltr", textAlign: "start" }}>{user.email}</div>
+                </div>
               </div>
-            </div>
-            {ROLE_PERSONAS.map(p => {
-              const u = p.user;
-              const active = p.id === getActivePersona().id;
-              const postingLabel = u.postingId ? (getPosting(u.postingId)?.city[lang]) : null;
-              return (
-                <button key={p.id}
-                  onClick={() => { setActivePersona(p.id); setRoleMenu(false); }}
-                  style={{ display: "flex", width: "100%", textAlign: "start", gap: 12, alignItems: "center",
-                    padding: "10px 10px", border: 0, background: active ? "var(--cream-panel)" : "transparent",
-                    borderRadius: 6, marginBottom: 2, cursor: "pointer" }}>
-                  <div style={{ width: 32, height: 32, borderRadius: 16, background: "var(--forest)",
-                    color: "var(--cream-page)", display: "grid", placeItems: "center",
-                    fontFamily: "var(--font-serif)", fontSize: 14 }}>{u.initial}</div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 500, color: "var(--ink)" }}>{u.name[lang]}</div>
-                    <div style={{ fontSize: 11, color: "var(--ink-faint)" }}>
-                      {t(`role_${u.role.replace("-", "_")}`, lang)}{postingLabel ? ` · ${postingLabel}` : ""}
-                    </div>
+              {divider}
+              {/* Current role */}
+              <div style={{ padding: "14px 18px 6px" }}>
+                {eyebrow(t("current_authority", lang))}
+                <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 9 }}>
+                  <div style={{ width: 34, height: 34, borderRadius: 9, background: "var(--brass)",
+                    color: "var(--ink)", display: "grid", placeItems: "center", flexShrink: 0 }}>
+                    <Icon name="briefcase" size={17} />
                   </div>
-                  {active && <Icon name="check" size={14} style={{ color: "var(--brass-deep)" }} />}
-                </button>
-              );
-            })}
-          </div>
-        )}
+                  <div style={{ fontSize: 14, fontWeight: 500 }}>{roleLabel}</div>
+                </div>
+              </div>
+              {/* Posting / department */}
+              <div style={{ padding: "14px 18px 16px" }}>
+                {eyebrow(t("posting_label", lang))}
+                <div style={{ fontSize: 14, fontWeight: 500, marginTop: 7 }}>{postingLabel}</div>
+              </div>
+              {divider}
+              {/* Role switcher (demo only) */}
+              <div style={{ padding: "10px 10px 8px" }}>
+                <div style={{ padding: "2px 8px 7px" }}>{eyebrow(t("switch_role", lang))}</div>
+                {ROLE_PERSONAS.map(p => {
+                  const u = p.user;
+                  const active = p.id === getActivePersona().id;
+                  return (
+                    <button key={p.id}
+                      onClick={() => { setActivePersona(p.id); setRoleMenu(false); }}
+                      style={{ display: "flex", width: "100%", textAlign: "start", gap: 10, alignItems: "center",
+                        padding: "8px 8px", border: 0, background: active ? "rgba(247,248,250,0.08)" : "transparent",
+                        borderRadius: 8, marginBottom: 1, cursor: "pointer", color: "inherit" }}>
+                      <div style={{ width: 26, height: 26, borderRadius: "50%",
+                        background: active ? "var(--brass)" : "rgba(247,248,250,0.12)",
+                        color: active ? "var(--ink)" : "var(--fg-on-forest)", display: "grid", placeItems: "center",
+                        fontFamily: "var(--font-serif)", fontSize: 12, flexShrink: 0 }}>{u.initial}</div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: 12.5, fontWeight: 500 }}>{u.name[lang]}</div>
+                        <div style={{ fontSize: 10.5, color: "rgba(247,248,250,0.5)" }}>{u.titleShort[lang]}</div>
+                      </div>
+                      {active && <Icon name="check" size={13} style={{ color: "var(--brass)" }} />}
+                    </button>
+                  );
+                })}
+              </div>
+              {divider}
+              {/* Sign out */}
+              <button
+                onClick={() => { setRoleMenu(false); navigate("/login"); }}
+                style={{ display: "flex", width: "100%", alignItems: "center", justifyContent: "space-between",
+                  gap: 10, padding: "14px 18px", border: 0, background: "transparent", color: "inherit",
+                  cursor: "pointer", fontSize: 14, fontWeight: 500 }}
+                onMouseEnter={e => { e.currentTarget.style.background = "rgba(247,248,250,0.06)"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}>
+                <span>{t("sign_out", lang)}</span>
+                <Icon name="logout" size={18} style={{ color: "rgba(247,248,250,0.7)" }} />
+              </button>
+            </div>
+          );
+        })()}
       </div>
     </header>
   );
