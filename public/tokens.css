@@ -3,7 +3,20 @@
  * Diplomatic premium. Forest + brass on cream.
  * ============================================================= */
 
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300..700;1,300..700&family=Inter:wght@300..700&family=Tajawal:wght@300;400;500;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300..700;1,300..700&family=Inter:wght@300..700&display=swap");
+
+@font-face {
+  font-family: 'Sakkal Majalla';
+  src: url('/Asset-Management-System/fonts/majalla.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Sakkal Majalla';
+  src: url('/Asset-Management-System/fonts/majallab.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
 
 :root {
   /* ---------- Color — base palette (PMS slate + gold) ---------- */
@@ -48,8 +61,8 @@
   /* ---------- Type — families ---------- */
   --font-serif:        "Playfair Display", "Times New Roman", Georgia, serif;
   --font-sans:         "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-arabic-display: "Tajawal", "Playfair Display", serif;
-  --font-arabic-body:    "IBM Plex Sans Arabic", "Tajawal", sans-serif;
+  --font-arabic-display: "Sakkal Majalla", sans-serif;
+  --font-arabic-body:    "Sakkal Majalla", sans-serif;
   --font-mono:         "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
 
   /* ---------- Type — scale ---------- */
