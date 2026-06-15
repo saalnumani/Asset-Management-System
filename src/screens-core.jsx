@@ -1003,10 +1003,14 @@ function PropertyBills({ prop, lang }) {
 
 // ─── 10) EVENTS & OCCASIONS ──────────────────────────────────
 function PropertyEvents({ prop, lang }) {
+  const [expanded, setExpanded] = React.useState({});
   const items = getEvents(prop.id);
   const cols = lang === "ar"
     ? ["الفعالية", "التاريخ", "الضيوف", "الميزانية (BHD)", "المشتريات", "الموقع", "ملاحظات"]
     : ["Event", "Date", "Guests", "Budget (BHD)", "Purchases", "Location", "Notes"];
+
+  const toggleGuests = (id) => setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
+
   return (
     <div className="card" style={{ padding: 28 }}>
       <TabHead title={lang === "ar" ? "الفعاليات والمناسبات" : "Events & Occasions"} kicker={lang === "ar" ? "الفعاليات" : "Events"} lang={lang}
@@ -1014,17 +1018,58 @@ function PropertyEvents({ prop, lang }) {
       {items.length === 0
         ? <div className="muted" style={{ padding: "40px 0", textAlign: "center" }}>{lang === "ar" ? "لا توجد فعاليات" : "No events recorded"}</div>
         : <DataTable cols={cols}>
-            {items.map(ev => (
-              <TR key={ev.id}>
-                <TD><span style={{ fontWeight: 500 }}>{lang === "ar" ? ev.event.ar : ev.event.en}</span></TD>
-                <TD muted>{fmtDate(ev.date, lang)}</TD>
-                <TD><span className="tnum">{ev.guests}</span></TD>
-                <TD><span className="tnum serif" style={{ color: "var(--forest)" }}>{fmtNumber(ev.budget)}</span></TD>
-                <TD muted style={{ maxWidth: 160 }}>{lang === "ar" ? ev.purchases.ar : ev.purchases.en}</TD>
-                <TD muted>{lang === "ar" ? ev.location.ar : ev.location.en}</TD>
-                <TD muted style={{ maxWidth: 140 }}>{ev.notes || "—"}</TD>
-              </TR>
-            ))}
+            {items.map(ev => {
+              const hasGuests = ev.guestList && ev.guestList.length > 0;
+              const isOpen = !!expanded[ev.id];
+              return (
+                <React.Fragment key={ev.id}>
+                  <TR>
+                    <TD><span style={{ fontWeight: 500 }}>{lang === "ar" ? ev.event.ar : ev.event.en}</span></TD>
+                    <TD muted>{fmtDate(ev.date, lang)}</TD>
+                    <TD>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-start" }}>
+                        <span className="tnum">{ev.guests}</span>
+                        <button
+                          onClick={() => toggleGuests(ev.id)}
+                          style={{
+                            display: "inline-flex", alignItems: "center", gap: 4,
+                            padding: "2px 7px", borderRadius: 20, border: "none", cursor: "pointer",
+                            fontSize: 11, fontWeight: 500, lineHeight: 1.4,
+                            background: hasGuests ? "rgba(56,115,78,0.12)" : "rgba(0,0,0,0.06)",
+                            color: hasGuests ? "var(--forest)" : "var(--ink-soft)",
+                          }}
+                        >
+                          {hasGuests ? "✓" : "—"}&nbsp;{lang === "ar" ? (hasGuests ? "الضيوف مُضافون" : "لا ضيوف") : (hasGuests ? "Guests Added" : "No Guests")}
+                          {hasGuests && <span style={{ marginLeft: 2 }}>{isOpen ? "▲" : "▼"}</span>}
+                        </button>
+                      </div>
+                    </TD>
+                    <TD><span className="tnum serif" style={{ color: "var(--forest)" }}>{fmtNumber(ev.budget)}</span></TD>
+                    <TD muted style={{ maxWidth: 160 }}>{lang === "ar" ? ev.purchases.ar : ev.purchases.en}</TD>
+                    <TD muted>{lang === "ar" ? ev.location.ar : ev.location.en}</TD>
+                    <TD muted style={{ maxWidth: 140 }}>{ev.notes || "—"}</TD>
+                  </TR>
+                  {hasGuests && isOpen && (
+                    <TR>
+                      <td colSpan={cols.length} style={{ padding: 0, background: "rgba(56,115,78,0.04)", borderTop: "none" }}>
+                        <div style={{ padding: "12px 20px 14px", display: "flex", flexDirection: "column", gap: 4 }}>
+                          <div style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--forest)", marginBottom: 6 }}>
+                            {lang === "ar" ? "قائمة الضيوف" : "Guest List"}
+                          </div>
+                          {ev.guestList.map((g, i) => (
+                            <div key={i} style={{ display: "flex", gap: 8, fontSize: 13, color: "var(--ink)" }}>
+                              <span style={{ fontWeight: 500 }}>{lang === "ar" ? g.name.ar : g.name.en}</span>
+                              <span style={{ color: "var(--ink-soft)" }}>—</span>
+                              <span style={{ color: "var(--ink-soft)" }}>{lang === "ar" ? g.role.ar : g.role.en}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </td>
+                    </TR>
+                  )}
+                </React.Fragment>
+              );
+            })}
           </DataTable>}
       <div style={{ marginTop: 16, fontSize: 12, color: "var(--ink-soft)" }}>
         {lang === "ar"

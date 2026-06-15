@@ -160,6 +160,10 @@ const MESSAGES = {
     cancel: "إلغاء",
     close: "إغلاق",
 
+    guests_added: "الضيوف مُضافون",
+    guests_none: "لا ضيوف",
+    guest_list: "قائمة الضيوف",
+
     // Role switcher (demo only)
     switch_role: "تبديل الصلاحية (للعرض فقط)",
     demo_only: "وضع العرض فقط",
@@ -314,6 +318,10 @@ const MESSAGES = {
     save: "Save",
     cancel: "Cancel",
     close: "Close",
+
+    guests_added: "Guests Added",
+    guests_none: "No Guests",
+    guest_list: "Guest List",
 
     current_authority: "Current Role",
     posting_label: "Posting · Department",

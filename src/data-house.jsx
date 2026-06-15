@@ -93,24 +93,142 @@ function getBills(propertyId) { return BILLS.filter(b => b.propertyId === proper
 // ---------- Events & Occasions ----------
 const EVENTS = [
   // Tokyo
-  { id: "ev-tk-01", propertyId: "prop-tokyo", event: { en: "National Day Reception", ar: "استقبال اليوم الوطني" }, date: "2025-12-16", guests: 120, budget: 4200, currency: "BHD", purchases: { en: "Flowers, catering, décor", ar: "زهور، تموين، ديكور" }, location: { en: "Grand Majlis + Garden", ar: "المجلس الكبير والحديقة" }, notes: "" },
-  { id: "ev-tk-02", propertyId: "prop-tokyo", event: { en: "Ambassador's Dinner", ar: "عشاء السفير" }, date: "2026-02-18", guests: 24, budget: 1400, currency: "BHD", purchases: { en: "Catering, flowers", ar: "تموين وزهور" }, location: { en: "Dining Room", ar: "غرفة الطعام" }, notes: "" },
-  { id: "ev-tk-03", propertyId: "prop-tokyo", event: { en: "Cultural Week Opening", ar: "افتتاح الأسبوع الثقافي" }, date: "2026-03-10", guests: 80, budget: 2800, currency: "BHD", purchases: { en: "Decorations, gifts, catering", ar: "ديكور، هدايا، تموين" }, location: { en: "Reception Hall", ar: "قاعة الاستقبال" }, notes: "" },
-  { id: "ev-tk-04", propertyId: "prop-tokyo", event: { en: "Farewell Ceremony", ar: "حفل الوداع" }, date: "2026-05-20", guests: 50, budget: 1800, currency: "BHD", purchases: { en: "Flowers, gifts", ar: "زهور وهدايا" }, location: { en: "Grand Majlis", ar: "المجلس الكبير" }, notes: "Outgoing ambassador" },
+  {
+    id: "ev-tk-01", propertyId: "prop-tokyo",
+    event: { en: "National Day Reception", ar: "استقبال اليوم الوطني" },
+    date: "2025-12-16", guests: 120, budget: 4200, currency: "BHD",
+    purchases: { en: "Flowers, catering, décor", ar: "زهور، تموين، ديكور" },
+    location: { en: "Grand Majlis + Garden", ar: "المجلس الكبير والحديقة" }, notes: "",
+    guestList: [
+      { name: { en: "H.E. Nasser Al-Mansoori", ar: "سعادة ناصر المنصوري" }, role: { en: "Ambassador of Bahrain to Japan", ar: "سفير البحرين لدى اليابان" } },
+      { name: { en: "H.E. Kenji Watanabe", ar: "سعادة كنجي واتانابي" }, role: { en: "Japanese Deputy Foreign Minister", ar: "نائب وزير الخارجية الياباني" } },
+      { name: { en: "Ms. Fatima Al-Zayani", ar: "الآنسة فاطمة الزياني" }, role: { en: "Cultural Attaché", ar: "الملحق الثقافي" } },
+      { name: { en: "Mr. Hiroshi Tanaka", ar: "السيد هيروشي تاناكا" }, role: { en: "Protocol Officer, MOFA Japan", ar: "مسؤول البروتوكول، وزارة الخارجية اليابانية" } },
+    ],
+  },
+  {
+    id: "ev-tk-02", propertyId: "prop-tokyo",
+    event: { en: "Ambassador's Dinner", ar: "عشاء السفير" },
+    date: "2026-02-18", guests: 24, budget: 1400, currency: "BHD",
+    purchases: { en: "Catering, flowers", ar: "تموين وزهور" },
+    location: { en: "Dining Room", ar: "غرفة الطعام" }, notes: "",
+    guestList: [
+      { name: { en: "H.E. Yuki Nakamura", ar: "سعادة يوكي ناكامورا" }, role: { en: "Ambassador of Japan to Bahrain", ar: "سفير اليابان لدى البحرين" } },
+      { name: { en: "Mr. Ali Hassan", ar: "السيد علي حسن" }, role: { en: "Chargé d'Affaires", ar: "القائم بالأعمال" } },
+      { name: { en: "Dr. Mitsuki Abe", ar: "د. ميتسوكي آبي" }, role: { en: "Trade Counsellor", ar: "مستشار التجارة" } },
+    ],
+  },
+  {
+    id: "ev-tk-03", propertyId: "prop-tokyo",
+    event: { en: "Cultural Week Opening", ar: "افتتاح الأسبوع الثقافي" },
+    date: "2026-03-10", guests: 80, budget: 2800, currency: "BHD",
+    purchases: { en: "Decorations, gifts, catering", ar: "ديكور، هدايا، تموين" },
+    location: { en: "Reception Hall", ar: "قاعة الاستقبال" }, notes: "",
+    guestList: [],
+  },
+  {
+    id: "ev-tk-04", propertyId: "prop-tokyo",
+    event: { en: "Farewell Ceremony", ar: "حفل الوداع" },
+    date: "2026-05-20", guests: 50, budget: 1800, currency: "BHD",
+    purchases: { en: "Flowers, gifts", ar: "زهور وهدايا" },
+    location: { en: "Grand Majlis", ar: "المجلس الكبير" }, notes: "Outgoing ambassador",
+    guestList: [
+      { name: { en: "H.E. Nasser Al-Mansoori", ar: "سعادة ناصر المنصوري" }, role: { en: "Outgoing Ambassador", ar: "السفير المنتهية ولايته" } },
+      { name: { en: "H.E. Khalid Al-Rumaihi", ar: "سعادة خالد الرميحي" }, role: { en: "Incoming Ambassador", ar: "السفير القادم" } },
+      { name: { en: "Ms. Aiko Yamamoto", ar: "الآنسة آيكو ياماموتو" }, role: { en: "Protocol Chief, Japanese FM", ar: "رئيسة البروتوكول" } },
+    ],
+  },
 
   // London
-  { id: "ev-lon-01", propertyId: "prop-london", event: { en: "National Day Reception", ar: "استقبال اليوم الوطني" }, date: "2025-12-16", guests: 200, budget: 8500, currency: "BHD", purchases: { en: "Catering, flowers, band", ar: "تموين، زهور، فرقة موسيقية" }, location: { en: "Grand Reception + Garden", ar: "قاعة الاستقبال والحديقة" }, notes: "" },
-  { id: "ev-lon-02", propertyId: "prop-london", event: { en: "Diplomatic Dinner", ar: "عشاء دبلوماسي" }, date: "2026-01-22", guests: 30, budget: 2200, currency: "BHD", purchases: { en: "Catering, flowers", ar: "تموين وزهور" }, location: { en: "Dining Room", ar: "غرفة الطعام" }, notes: "" },
-  { id: "ev-lon-03", propertyId: "prop-london", event: { en: "Garden Party", ar: "حفلة الحديقة" }, date: "2026-06-15", guests: 80, budget: 3400, currency: "BHD", purchases: { en: "Marquee hire, catering", ar: "إيجار خيمة، تموين" }, location: { en: "Garden", ar: "الحديقة" }, notes: "" },
+  {
+    id: "ev-lon-01", propertyId: "prop-london",
+    event: { en: "National Day Reception", ar: "استقبال اليوم الوطني" },
+    date: "2025-12-16", guests: 200, budget: 8500, currency: "BHD",
+    purchases: { en: "Catering, flowers, band", ar: "تموين، زهور، فرقة موسيقية" },
+    location: { en: "Grand Reception + Garden", ar: "قاعة الاستقبال والحديقة" }, notes: "",
+    guestList: [
+      { name: { en: "H.E. Lord David Cameron", ar: "سعادة اللورد ديفيد كاميرون" }, role: { en: "Former UK Foreign Secretary", ar: "وزير الخارجية البريطاني السابق" } },
+      { name: { en: "H.E. Hamad Al-Khalifa", ar: "سعادة حمد آل خليفة" }, role: { en: "Ambassador of Bahrain to the UK", ar: "سفير البحرين لدى المملكة المتحدة" } },
+      { name: { en: "Ms. Sarah Mitchell", ar: "الآنسة سارة ميتشيل" }, role: { en: "Head of GCC Desk, FCO", ar: "رئيسة ملف دول الخليج" } },
+      { name: { en: "Mr. James Thornton", ar: "السيد جيمس ثورنتون" }, role: { en: "Commercial Attaché", ar: "الملحق التجاري" } },
+      { name: { en: "Dr. Amal Al-Hassan", ar: "د. أمل الحسن" }, role: { en: "Cultural Counsellor", ar: "المستشار الثقافي" } },
+    ],
+  },
+  {
+    id: "ev-lon-02", propertyId: "prop-london",
+    event: { en: "Diplomatic Dinner", ar: "عشاء دبلوماسي" },
+    date: "2026-01-22", guests: 30, budget: 2200, currency: "BHD",
+    purchases: { en: "Catering, flowers", ar: "تموين وزهور" },
+    location: { en: "Dining Room", ar: "غرفة الطعام" }, notes: "",
+    guestList: [
+      { name: { en: "H.E. Peter Radford", ar: "سعادة بيتر رادفورد" }, role: { en: "UK Middle East Director", ar: "مدير ملف الشرق الأوسط" } },
+      { name: { en: "Mr. Omar Al-Sayed", ar: "السيد عمر السيد" }, role: { en: "First Secretary", ar: "السكرتير الأول" } },
+    ],
+  },
+  {
+    id: "ev-lon-03", propertyId: "prop-london",
+    event: { en: "Garden Party", ar: "حفلة الحديقة" },
+    date: "2026-06-15", guests: 80, budget: 3400, currency: "BHD",
+    purchases: { en: "Marquee hire, catering", ar: "إيجار خيمة، تموين" },
+    location: { en: "Garden", ar: "الحديقة" }, notes: "",
+    guestList: [],
+  },
 
   // Paris
-  { id: "ev-par-01", propertyId: "prop-paris", event: { en: "National Day Reception", ar: "استقبال اليوم الوطني" }, date: "2025-12-16", guests: 150, budget: 6200, currency: "BHD", purchases: { en: "Catering, décor", ar: "تموين وديكور" }, location: { en: "Embassy Hall", ar: "قاعة السفارة" }, notes: "" },
-  { id: "ev-par-02", propertyId: "prop-paris", event: { en: "Bastille Day Dinner", ar: "عشاء يوم الباستيل" }, date: "2025-07-14", guests: 40, budget: 2800, currency: "BHD", purchases: { en: "Catering, flowers", ar: "تموين وزهور" }, location: { en: "Dining Room", ar: "غرفة الطعام" }, notes: "" },
+  {
+    id: "ev-par-01", propertyId: "prop-paris",
+    event: { en: "National Day Reception", ar: "استقبال اليوم الوطني" },
+    date: "2025-12-16", guests: 150, budget: 6200, currency: "BHD",
+    purchases: { en: "Catering, décor", ar: "تموين وديكور" },
+    location: { en: "Embassy Hall", ar: "قاعة السفارة" }, notes: "",
+    guestList: [
+      { name: { en: "H.E. Jean-Pierre Duval", ar: "سعادة جان بيير دوفال" }, role: { en: "French Deputy Foreign Minister", ar: "نائب وزير الخارجية الفرنسي" } },
+      { name: { en: "H.E. Yousef Al-Saffar", ar: "سعادة يوسف الصفار" }, role: { en: "Ambassador of Bahrain to France", ar: "سفير البحرين لدى فرنسا" } },
+      { name: { en: "Ms. Camille Bertrand", ar: "الآنسة كاميل بيرتران" }, role: { en: "Protocol Officer, Élysée", ar: "مسؤولة البروتوكول" } },
+    ],
+  },
+  {
+    id: "ev-par-02", propertyId: "prop-paris",
+    event: { en: "Bastille Day Dinner", ar: "عشاء يوم الباستيل" },
+    date: "2025-07-14", guests: 40, budget: 2800, currency: "BHD",
+    purchases: { en: "Catering, flowers", ar: "تموين وزهور" },
+    location: { en: "Dining Room", ar: "غرفة الطعام" }, notes: "",
+    guestList: [],
+  },
 
   // Washington
-  { id: "ev-ws-01", propertyId: "prop-washington", event: { en: "National Day Reception", ar: "استقبال اليوم الوطني" }, date: "2025-12-16", guests: 250, budget: 9800, currency: "BHD", purchases: { en: "Catering, flowers, security", ar: "تموين، زهور، أمن" }, location: { en: "Residence + Garden", ar: "المقر والحديقة" }, notes: "" },
-  { id: "ev-ws-02", propertyId: "prop-washington", event: { en: "4th of July Dinner", ar: "عشاء الرابع من يوليو" }, date: "2025-07-04", guests: 35, budget: 1900, currency: "BHD", purchases: { en: "Catering", ar: "تموين" }, location: { en: "Terrace", ar: "التراس" }, notes: "" },
-  { id: "ev-ws-03", propertyId: "prop-washington", event: { en: "Family Gathering", ar: "لقاء عائلي" }, date: "2026-02-18", guests: 12, budget: 380, currency: "BHD", purchases: { en: "Food, decorations", ar: "طعام وديكور" }, location: { en: "Living Room", ar: "غرفة المعيشة" }, notes: "" },
+  {
+    id: "ev-ws-01", propertyId: "prop-washington",
+    event: { en: "National Day Reception", ar: "استقبال اليوم الوطني" },
+    date: "2025-12-16", guests: 250, budget: 9800, currency: "BHD",
+    purchases: { en: "Catering, flowers, security", ar: "تموين، زهور، أمن" },
+    location: { en: "Residence + Garden", ar: "المقر والحديقة" }, notes: "",
+    guestList: [
+      { name: { en: "H.E. Anthony Blinken", ar: "سعادة أنتوني بلينكن" }, role: { en: "US Secretary of State", ar: "وزير الخارجية الأمريكي" } },
+      { name: { en: "H.E. Rashid Al-Dosari", ar: "سعادة راشد الدوسري" }, role: { en: "Ambassador of Bahrain to the US", ar: "سفير البحرين لدى الولايات المتحدة" } },
+      { name: { en: "Ms. Jennifer Walsh", ar: "الآنسة جينيفر والش" }, role: { en: "Deputy Chief of Mission", ar: "نائبة رئيس البعثة" } },
+      { name: { en: "Mr. Faisal Al-Kooheji", ar: "السيد فيصل الكوهجي" }, role: { en: "Defence Attaché", ar: "الملحق العسكري" } },
+    ],
+  },
+  {
+    id: "ev-ws-02", propertyId: "prop-washington",
+    event: { en: "4th of July Dinner", ar: "عشاء الرابع من يوليو" },
+    date: "2025-07-04", guests: 35, budget: 1900, currency: "BHD",
+    purchases: { en: "Catering", ar: "تموين" },
+    location: { en: "Terrace", ar: "التراس" }, notes: "",
+    guestList: [
+      { name: { en: "Mr. Charles Bennett", ar: "السيد تشارلز بينيت" }, role: { en: "US State Dept. Liaison", ar: "مسؤول الارتباط بوزارة الخارجية" } },
+      { name: { en: "Ms. Nora Al-Shaikh", ar: "الآنسة نورة الشيخ" }, role: { en: "Press Attaché", ar: "الملحق الإعلامي" } },
+    ],
+  },
+  {
+    id: "ev-ws-03", propertyId: "prop-washington",
+    event: { en: "Family Gathering", ar: "لقاء عائلي" },
+    date: "2026-02-18", guests: 12, budget: 380, currency: "BHD",
+    purchases: { en: "Food, decorations", ar: "طعام وديكور" },
+    location: { en: "Living Room", ar: "غرفة المعيشة" }, notes: "",
+    guestList: [],
+  },
 ];
 
 function getEvents(propertyId) { return EVENTS.filter(e => e.propertyId === propertyId); }
