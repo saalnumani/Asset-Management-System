@@ -6,7 +6,7 @@
 
 const MESSAGES = {
   ar: {
-    app_name: "نظام إدارة المنزل",
+    app_name: "نظام ادارة شؤون العقارات في الخارج للبعثة و المنزل",
     eyebrow: "مملكة البحرين · وزارة الخارجية",
     search_placeholder: "بحث في النظام…",
 
@@ -175,7 +175,7 @@ const MESSAGES = {
     persona_disclaimer: "في النظام الحقيقي تُحدَّد الصلاحية تلقائياً عند تسجيل الدخول. هذا المبدّل مخصص للاطّلاع على الواجهة فقط.",
   },
   en: {
-    app_name: "Bahrain House Management",
+    app_name: "Overseas Property Management System",
     eyebrow: "Internal system · Ministry of Foreign Affairs",
     search_placeholder: "Search the system…",
 

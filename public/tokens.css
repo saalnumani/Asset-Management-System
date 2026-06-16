@@ -6,136 +6,138 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300..700;1,300..700&family=Inter:wght@300..700&display=swap");
 
 @font-face {
-  font-family: 'Sakkal Majalla';
-  src: url('./fonts/majalla.ttf') format('truetype');
+  font-family: "Sakkal Majalla";
+  src: url("./fonts/majalla.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
 }
 @font-face {
-  font-family: 'Sakkal Majalla';
-  src: url('./fonts/majallab.ttf') format('truetype');
+  font-family: "Sakkal Majalla";
+  src: url("./fonts/majallab.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
 }
 
 :root {
   /* ---------- Color — base palette (PMS slate + gold) ---------- */
-  --forest:           #3D4F6B;   /* slate blue — primary / structural */
-  --forest-deep:      #2E3D54;   /* darker slate — hover / headers */
-  --forest-soft:      #51678C;   /* mid slate — accents / sidebar hover */
-  --brass:            #D8BB87;   /* gold — accent / primary highlight */
-  --brass-deep:       #9A742F;   /* deep gold — label text / icons */
-  --brass-soft:       #E8D5B0;   /* light gold — subtle highlights */
+  --forest: #3d4f6b; /* slate blue — primary / structural */
+  --forest-deep: #2e3d54; /* darker slate — hover / headers */
+  --forest-soft: #51678c; /* mid slate — accents / sidebar hover */
+  --brass: #d8bb87; /* gold — accent / primary highlight */
+  --brass-deep: #9a742f; /* deep gold — label text / icons */
+  --brass-soft: #e8d5b0; /* light gold — subtle highlights */
 
-  --cream-page:       #FAFAF9;   /* card / panel surface (near white) */
-  --cream-panel:      #EFEFEC;   /* hover rows / inset panels (light gray) */
-  --cream-deep:       #E2E2DD;   /* pressed / progress track */
-  --ink:              #29384F;   /* body text — deep slate */
-  --ink-soft:         #51607A;   /* secondary text */
-  --ink-faint:        #8893A6;   /* tertiary, captions */
+  --cream-page: #fafaf9; /* card / panel surface (near white) */
+  --cream-panel: #efefec; /* hover rows / inset panels (light gray) */
+  --cream-deep: #e2e2dd; /* pressed / progress track */
+  --ink: #29384f; /* body text — deep slate */
+  --ink-soft: #51607a; /* secondary text */
+  --ink-faint: #8893a6; /* tertiary, captions */
 
   /* ---------- Color — semantic (muted) ---------- */
-  --positive:         #3D5A7A;   /* slate (palette has no green) */
-  --positive-tint:    #E4E9F0;
-  --warning:          #A8761F;   /* deep gold-ochre */
-  --warning-tint:     #F2E7D0;
-  --critical:         #993A33;   /* brick red — secondary / destructive */
-  --critical-tint:    #F0DCD9;
-  --info:             #3D5772;   /* slate blue */
-  --info-tint:        #DFE5EC;
+  --positive: #3d5a7a; /* slate (palette has no green) */
+  --positive-tint: #e4e9f0;
+  --warning: #a8761f; /* deep gold-ochre */
+  --warning-tint: #f2e7d0;
+  --critical: #993a33; /* brick red — secondary / destructive */
+  --critical-tint: #f0dcd9;
+  --info: #3d5772; /* slate blue */
+  --info-tint: #dfe5ec;
 
   /* ---------- Color — semantic (functional) ---------- */
-  --bg:               #F0F1F2;          /* page canvas — neutral light gray */
-  --bg-panel:         var(--cream-panel);
-  --bg-elevated:      #FFFFFF;          /* used very sparingly — modal sheets */
-  --fg:               var(--ink);
-  --fg-muted:         var(--ink-soft);
-  --fg-faint:         var(--ink-faint);
-  --fg-on-forest:     #F7F8FA;          /* light text on slate */
-  --fg-on-brass:      #36301C;          /* deep text on gold — readable */
+  --bg: #f0f1f2; /* page canvas — neutral light gray */
+  --bg-panel: var(--cream-panel);
+  --bg-elevated: #ffffff; /* used very sparingly — modal sheets */
+  --fg: var(--ink);
+  --fg-muted: var(--ink-soft);
+  --fg-faint: var(--ink-faint);
+  --fg-on-forest: #f7f8fa; /* light text on slate */
+  --fg-on-brass: #36301c; /* deep text on gold — readable */
 
-  --border-hair:      rgba(150, 124, 78, 0.32);   /* gold hairline */
-  --border-faint:     rgba(150, 124, 78, 0.17);   /* table dividers */
-  --border-strong:    rgba(61, 79, 107, 0.45);    /* focused / selected */
+  --border-hair: rgba(150, 124, 78, 0.32); /* gold hairline */
+  --border-faint: rgba(150, 124, 78, 0.17); /* table dividers */
+  --border-strong: rgba(61, 79, 107, 0.45); /* focused / selected */
 
   /* ---------- Type — families ---------- */
-  --font-serif:        "Playfair Display", "Times New Roman", Georgia, serif;
-  --font-sans:         "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Playfair Display", "Times New Roman", Georgia, serif;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-arabic-display: "Sakkal Majalla", sans-serif;
-  --font-arabic-body:    "Sakkal Majalla", sans-serif;
-  --font-mono:         "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+  --font-arabic-body: "Sakkal Majalla", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
 
   /* ---------- Type — scale ---------- */
-  --fs-display:       72px;   /* hero stats, login title */
-  --fs-h1:            40px;
-  --fs-h2:            32px;
-  --fs-h3:            24px;
-  --fs-h4:            20px;
-  --fs-body:          15px;   /* default body */
-  --fs-small:         13px;
-  --fs-label:         11px;   /* small-caps labels */
-  --fs-mono:          13px;
+  --fs-display: 72px; /* hero stats, login title */
+  --fs-h1: 40px;
+  --fs-h2: 32px;
+  --fs-h3: 24px;
+  --fs-h4: 20px;
+  --fs-body: 16px; /* default body */
+  --fs-small: 14px;
+  --fs-label: 12px; /* small-caps labels */
+  --fs-mono: 14px;
 
-  --lh-tight:         1.2;
-  --lh-snug:          1.35;
-  --lh-body:          1.65;
-  --lh-loose:         1.8;
+  --lh-tight: 1.2;
+  --lh-snug: 1.35;
+  --lh-body: 1.65;
+  --lh-loose: 1.8;
 
-  --ls-label:         0.12em;   /* small caps */
-  --ls-tight:         -0.01em;
-  --ls-display:       -0.015em;
+  --ls-label: 0.12em; /* small caps */
+  --ls-tight: -0.01em;
+  --ls-display: -0.015em;
 
   /* ---------- Spacing — 4px grid ---------- */
-  --space-0:          0;
-  --space-1:          4px;
-  --space-2:          8px;
-  --space-3:          12px;
-  --space-4:          16px;
-  --space-5:          20px;
-  --space-6:          24px;
-  --space-8:          32px;
-  --space-10:         40px;
-  --space-12:         48px;
-  --space-16:         64px;
-  --space-20:         80px;
-  --space-24:         96px;
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
 
   /* ---------- Radii ---------- */
-  --radius-button:    6px;
-  --radius-input:     6px;
-  --radius-card:      12px;
-  --radius-pill:      999px;
-  --radius-none:      0;
+  --radius-button: 6px;
+  --radius-input: 6px;
+  --radius-card: 12px;
+  --radius-pill: 999px;
+  --radius-none: 0;
 
   /* ---------- Borders ---------- */
-  --border-1:         1px solid var(--border-hair);
-  --border-faint-1:   1px solid var(--border-faint);
-  --border-focus:     1.5px solid var(--forest);
+  --border-1: 1px solid var(--border-hair);
+  --border-faint-1: 1px solid var(--border-faint);
+  --border-focus: 1.5px solid var(--forest);
 
   /* ---------- Elevation — there is no elevation ----------
    * No shadows are used in this system.
    * Use border + background tone shift instead. */
-  --shadow-none:      none;
+  --shadow-none: none;
 
   /* ---------- Motion ---------- */
-  --ease:             cubic-bezier(0.32, 0.72, 0, 1);
-  --dur-quick:        180ms;
-  --dur-normal:       280ms;
-  --dur-slow:         400ms;
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-quick: 180ms;
+  --dur-normal: 280ms;
+  --dur-slow: 400ms;
 
   /* ---------- Layout ---------- */
-  --container-max:    1440px;
-  --sidebar-w:        260px;
-  --topbar-h:         64px;
-  --row-h:            44px;        /* dense ledger row */
-  --row-h-comfy:      56px;        /* default row */
+  --container-max: 1440px;
+  --sidebar-w: 260px;
+  --topbar-h: 75px;
+  --row-h: 44px; /* dense ledger row */
+  --row-h-comfy: 56px; /* default row */
 }
 
 /* =============================================================
  * Base — page reset + defaults
  * ============================================================= */
 
-html { color-scheme: light only; }
+html {
+  color-scheme: light only;
+}
 
 body {
   margin: 0;
@@ -154,8 +156,12 @@ html[dir="rtl"] body,
 [dir="rtl"] {
   font-family: var(--font-arabic-body);
 }
-[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4,
-[dir="rtl"] .display, [dir="rtl"] .stat-num {
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] .display,
+[dir="rtl"] .stat-num {
   font-family: var(--font-arabic-display);
 }
 
@@ -163,7 +169,8 @@ html[dir="rtl"] body,
  * Type — semantic vars
  * ============================================================= */
 
-h1, .h1 {
+h1,
+.h1 {
   font-family: var(--font-serif);
   font-weight: 400;
   font-size: var(--fs-h1);
@@ -171,7 +178,8 @@ h1, .h1 {
   letter-spacing: var(--ls-display);
   margin: 0;
 }
-h2, .h2 {
+h2,
+.h2 {
   font-family: var(--font-serif);
   font-weight: 400;
   font-size: var(--fs-h2);
@@ -179,14 +187,16 @@ h2, .h2 {
   letter-spacing: var(--ls-display);
   margin: 0;
 }
-h3, .h3 {
+h3,
+.h3 {
   font-family: var(--font-serif);
   font-weight: 400;
   font-size: var(--fs-h3);
   line-height: var(--lh-snug);
   margin: 0;
 }
-h4, .h4 {
+h4,
+.h4 {
   font-family: var(--font-sans);
   font-weight: 600;
   font-size: var(--fs-h4);
@@ -212,14 +222,16 @@ h4, .h4 {
   color: var(--forest);
 }
 
-p, .p {
+p,
+.p {
   font-size: var(--fs-body);
   line-height: var(--lh-body);
   margin: 0 0 var(--space-4) 0;
   color: var(--fg);
 }
 
-small, .small {
+small,
+.small {
   font-size: var(--fs-small);
   line-height: var(--lh-snug);
   color: var(--fg-muted);
@@ -234,7 +246,8 @@ small, .small {
   color: var(--brass-deep);
 }
 
-code, .mono {
+code,
+.mono {
   font-family: var(--font-mono);
   font-size: var(--fs-mono);
   background: var(--cream-panel);
@@ -248,13 +261,21 @@ a {
   border-bottom: 1px solid transparent;
   transition: border-color var(--dur-quick) var(--ease);
 }
-a:hover { border-bottom-color: var(--brass); }
+a:hover {
+  border-bottom-color: var(--brass);
+}
 
 /* Selection */
-::selection { background: var(--brass-soft); color: var(--ink); }
+::selection {
+  background: var(--brass-soft);
+  color: var(--ink);
+}
 
 /* Hide scrollbar chrome but allow scroll — used in tight panels */
-.scroll-clean::-webkit-scrollbar { width: 6px; height: 6px; }
+.scroll-clean::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
 .scroll-clean::-webkit-scrollbar-thumb {
   background: var(--border-hair);
   border-radius: 3px;
