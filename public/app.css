@@ -1288,4 +1288,9 @@ a:focus-visible,
 
   /* Room screen: unset fixed height so panels stack naturally */
   .mob-grid-1[style*="calc(100vh"] { height: auto !important; }
+
+  /* Hero band — stack copy above CTA on mobile */
+  .hero-band { height: auto; min-height: 200px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .hero-band .copy { position: static; transform: none; padding: 28px 24px 16px; }
+  .hero-band .cta { position: static; transform: none; padding: 0 24px 28px; }
 }
