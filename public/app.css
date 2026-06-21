@@ -1208,7 +1208,9 @@ a:focus-visible,
 }
 
 /* ---- Mobile (≤767px) ---- */
-.menu-btn { display: none; }
+.menu-btn {
+  display: none;
+}
 
 @media (max-width: 767px) {
   /* Override RTL/LTR specificity by repeating selectors inside the query */
@@ -1242,52 +1244,97 @@ a:focus-visible,
     transform: translateX(-100%);
     transition: transform 0.25s var(--ease);
   }
-  [dir="rtl"] .sidebar { transform: translateX(100%); }
-  .sidebar.sidebar--open { transform: translateX(0) !important; }
+  [dir="rtl"] .sidebar {
+    transform: translateX(100%);
+  }
+  .sidebar.sidebar--open {
+    transform: translateX(0) !important;
+  }
 
   .sidebar-backdrop {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.45);
+    background: rgba(0, 0, 0, 0.45);
     z-index: 49;
   }
-  .sidebar-backdrop.sidebar-backdrop--visible { display: block; }
+  .sidebar-backdrop.sidebar-backdrop--visible {
+    display: block;
+  }
 
-  .menu-btn { display: flex; }
+  .menu-btn {
+    display: flex;
+  }
 
   /* Hide brand text on mobile */
-  .topbar .brand { display: none; }
+  .topbar .brand {
+    display: none;
+  }
 
-  .topbar { padding-inline: 14px; gap: 10px; }
+  .topbar {
+    padding-inline: 14px;
+    gap: 10px;
+  }
 
-  .page { padding: 16px; }
+  .page {
+    padding: 16px;
+  }
 
   /* ---- Page header ---- */
-  .page-head { flex-wrap: wrap; gap: 10px; }
-  .page-head .actions { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+  .page-head {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .page-head .actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
 
   /* ---- Stat strip (property detail top band) ---- */
-  .stat-strip { grid-template-columns: repeat(2, 1fr); }
-  .stat { padding: 14px 16px; }
+  .stat-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .stat {
+    padding: 14px 16px;
+  }
 
   /* ---- Property cards ---- */
-  .prop-card .micro { grid-template-columns: repeat(2, 1fr); }
+  .prop-card .micro {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
   /* ---- Tabs: horizontal scroll ---- */
-  .tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; }
+  .tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+  }
 
   /* ---- Tables: force min-width so they scroll inside their overflow wrapper ---- */
-  .tbl { min-width: 560px; }
+  .tbl {
+    min-width: 560px;
+  }
 
   /* ---- Responsive utilities (applied via className in JSX) ---- */
-  .mob-grid-1 { grid-template-columns: 1fr !important; }
-  .mob-grid-2 { grid-template-columns: repeat(2, 1fr) !important; }
-  .mob-stack  { flex-direction: column !important; }
-  .mob-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .mob-grid-1 {
+    grid-template-columns: 1fr !important;
+  }
+  .mob-grid-2 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .mob-stack {
+    flex-direction: column !important;
+  }
+  .mob-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 
   /* Room screen: unset fixed height so panels stack naturally */
-  .mob-grid-1[style*="calc(100vh"] { height: auto !important; }
+  .mob-grid-1[style*="calc(100vh"] {
+    height: auto !important;
+  }
 
   /* Hero band — mobile reflow */
   .hero-band {
@@ -1298,7 +1345,12 @@ a:focus-visible,
   }
   /* Override the horizontal gradient with a full-coverage bottom-up overlay */
   .hero-band .three-wrap > div:last-child {
-    background: linear-gradient(to top, rgba(15,26,51,0.92) 0%, rgba(15,26,51,0.55) 55%, rgba(15,26,51,0.15) 100%) !important;
+    background: linear-gradient(
+      to top,
+      rgba(15, 26, 51, 0.92) 0%,
+      rgba(15, 26, 51, 0.55) 55%,
+      rgba(15, 26, 51, 0.15) 100%
+    ) !important;
   }
   .hero-band .copy {
     position: static;
@@ -1307,7 +1359,9 @@ a:focus-visible,
     padding: 0 20px 8px;
     pointer-events: auto;
   }
-  .hero-band .copy h1 { font-size: 26px; }
+  .hero-band .copy h1 {
+    font-size: 44px;
+  }
   .hero-band .cta {
     position: static;
     transform: none;
