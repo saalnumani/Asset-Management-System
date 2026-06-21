@@ -44,12 +44,15 @@ function useRoute() {
 // =============================================================
 // TopBar
 // =============================================================
-function TopBar({ lang, setLang, activePropId, setActivePropId }) {
+function TopBar({ lang, setLang, activePropId, setActivePropId, onMenuClick }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [roleMenu, setRoleMenu] = useState(false);
   const { user } = useCurrentRole();
   return (
     <header className="topbar">
+      <button className="menu-btn icon-btn" onClick={onMenuClick} aria-label="Menu">
+        <Icon name="list" size={20} />
+      </button>
       <a
         className="brand"
         href="#/dashboard"
@@ -400,9 +403,9 @@ const NAV = [
   {
     sec: "sec_dashboard",
     items: [
-      { key: "nav_overview", icon: "home", path: "/dashboard" },
-      { key: "nav_reminders", icon: "bell", path: "/reminders", badge: 7 },
-      { key: "nav_audit", icon: "history", path: "/audit" },
+      { key: "nav_overview",   icon: "home",    path: "/dashboard" },
+      { key: "nav_reminders",  icon: "bell",    path: "/reminders", badge: 7 },
+      { key: "nav_audit",      icon: "history", path: "/audit" },
     ],
   },
   {
@@ -414,34 +417,39 @@ const NAV = [
   {
     sec: "sec_operations",
     items: [
-      {
-        key: "nav_handover",
-        icon: "switch",
-        path: "/handover/ho-tokyo-2026",
-        dot: true,
-      },
+      { key: "nav_handover",    icon: "switch", path: "/handover/ho-tokyo-2026", dot: true },
       { key: "nav_maintenance", icon: "wrench", path: "/maintenance" },
-      { key: "nav_vendors", icon: "users", path: "/vendors" },
-      { key: "nav_reports", icon: "list", path: "/reports" },
+      { key: "nav_fleet",       icon: "archive", path: "/fleet" },
+      { key: "nav_vendors",     icon: "users",  path: "/vendors" },
+      { key: "nav_reports",     icon: "list",   path: "/reports" },
     ],
   },
   {
     sec: "sec_records",
     items: [
+      { key: "nav_bills",          icon: "file",    path: "/bills" },
+      { key: "nav_events",         icon: "calendar", path: "/events" },
       { key: "nav_asset_register", icon: "archive", path: "/assets" },
-      { key: "nav_documents", icon: "file", path: "/documents" },
+      { key: "nav_documents",      icon: "file",    path: "/documents" },
+      { key: "nav_uniforms",       icon: "users",   path: "/uniforms" },
+      { key: "nav_fridge",         icon: "archive", path: "/fridge" },
+      { key: "nav_grocery",        icon: "list",    path: "/grocery" },
+      { key: "nav_storage",        icon: "archive", path: "/storage" },
     ],
   },
   {
     sec: "sec_admin",
     items: [
-      { key: "nav_users", icon: "users", path: "/users" },
+      { key: "nav_users",    icon: "users",    path: "/users" },
       { key: "nav_settings", icon: "settings", path: "/settings" },
     ],
   },
 ];
 
-function Sidebar({ lang, route }) {
+function Sidebar({ lang, route, open, onClose }) {
+  const { user } = useCurrentRole();
+  const isEmbassy = user.postingId != null;
+
   const isActive = (path) => {
     const top = path.split("/")[1];
     if (top === "dashboard" && route.name === "dashboard") return true;
@@ -455,8 +463,56 @@ function Sidebar({ lang, route }) {
     if (top === "handover" && route.name === "handover") return true;
     return route.name === top;
   };
+
+  // Build a filtered nav based on the active user's role
+  const visibleNav = NAV
+    .map(group => {
+      if (group.sec === "sec_admin" && !can(user, "manage-users-any")) return null;
+      const items = group.items.filter(it => {
+        if (it.path === "/reports" && !can(user, "view-cross-posting-reports")) return false;
+        return true;
+      });
+      return { ...group, items };
+    })
+    .filter(Boolean);
+
+  // Collapsed state: section key → bool (true = collapsed)
+  // Dashboard starts expanded; others start expanded too
+  const [collapsed, setCollapsed] = useState({});
+  const toggle = (sec) => setCollapsed(prev => ({ ...prev, [sec]: !prev[sec] }));
+
+  const SidebarSection = ({ secKey, label, children }) => {
+    const isCollapsed = !!collapsed[secKey];
+    return (
+      <>
+        <div
+          className="sidebar-section"
+          onClick={() => toggle(secKey)}
+          style={{ cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", userSelect: "none" }}
+        >
+          <span>{label}</span>
+          <Icon
+            name="chevron_down"
+            size={12}
+            style={{
+              color: "rgba(247,248,250,0.4)",
+              transform: isCollapsed ? "rotate(-90deg)" : "rotate(0deg)",
+              transition: "transform 0.2s ease",
+            }}
+          />
+        </div>
+        {!isCollapsed && children}
+      </>
+    );
+  };
+
   return (
-    <aside className="sidebar scroll-clean">
+    <>
+    <div
+      className={"sidebar-backdrop" + (open ? " sidebar-backdrop--visible" : "")}
+      onClick={onClose}
+    />
+    <aside className={"sidebar scroll-clean" + (open ? " sidebar--open" : "")}>
       <div
         style={{
           display: "flex",
@@ -472,9 +528,8 @@ function Sidebar({ lang, route }) {
           style={{ height: 52, display: "block" }}
         />
       </div>
-      {NAV.map((group) => (
-        <React.Fragment key={group.sec}>
-          <div className="sidebar-section">{t(group.sec, lang)}</div>
+      {visibleNav.map((group) => (
+        <SidebarSection key={group.sec} secKey={group.sec} label={t(group.sec, lang)}>
           {group.items.map((it) => (
             <a
               key={it.key}
@@ -491,9 +546,22 @@ function Sidebar({ lang, route }) {
               {it.dot && !it.badge && <span className="dot" />}
             </a>
           ))}
-        </React.Fragment>
+        </SidebarSection>
       ))}
+      {/* My Staff — only visible to embassy users */}
+      {isEmbassy && (
+        <SidebarSection secKey="sec_embassy" label={lang === "ar" ? "السفارة" : "Embassy"}>
+          <a
+            className={"nav-item" + (route.name === "staff" ? " active" : "")}
+            href="#/staff"
+          >
+            <Icon name="users" size={18} style={{ color: "var(--brass-deep)" }} />
+            <span>{lang === "ar" ? "فريق العمل" : "My Staff"}</span>
+          </a>
+        </SidebarSection>
+      )}
     </aside>
+    </>
   );
 }
 
