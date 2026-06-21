@@ -35,16 +35,17 @@ function StubScreen({ lang, title, kicker, hint }) {
 }
 
 const STUB_LABELS = {
-  reminders:    { en: "Reminders",       ar: "التذكيرات" },
-  audit:        { en: "Audit log",       ar: "سجل النشاط" },
-  maintenance:  { en: "Maintenance",     ar: "الصيانة" },
-  vendors:      { en: "Vendors",         ar: "المتعاقدون" },
-  approvals:    { en: "Approvals",       ar: "الموافقات" },
-  reports:      { en: "Reports",         ar: "التقارير" },
-  assets:       { en: "Asset register",  ar: "سجل الأصول" },
-  documents:    { en: "Documents",       ar: "الوثائق" },
-  users:        { en: "Users & roles",   ar: "المستخدمون والصلاحيات" },
-  settings:     { en: "Settings",        ar: "الإعدادات" },
+  audit:            { en: "Audit log",          ar: "سجل النشاط" },
+  vendors:          { en: "Vendors",             ar: "المتعاقدون" },
+  approvals:        { en: "Approvals",           ar: "الموافقات" },
+  reports:          { en: "Reports",             ar: "التقارير" },
+  assets:           { en: "Asset register",      ar: "سجل الأصول" },
+  documents:        { en: "Documents",           ar: "الوثائق" },
+  users:            { en: "Users & roles",       ar: "المستخدمون والصلاحيات" },
+  settings:         { en: "Settings",            ar: "الإعدادات" },
+  uniforms:         { en: "Uniforms",            ar: "الزي الرسمي" },
+  storage:          { en: "Storage",             ar: "المستودع" },
+  "events-protocol":{ en: "Events Protocol",    ar: "بروتوكول الفعاليات" },
 };
 
 function StubByName({ lang, name }) {

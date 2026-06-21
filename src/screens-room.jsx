@@ -29,7 +29,7 @@ function RoomScreen({ lang, pid, rid }) {
         { label: room.name[lang] },
       ]} />
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 420px", gap: 0, height: "calc(100vh - var(--topbar-h) - 36px)" }}>
+      <div className="mob-grid-1" style={{ display: "grid", gridTemplateColumns: "1fr 420px", gap: 0, height: "calc(100vh - var(--topbar-h) - 36px)" }}>
         {/* 3D viewport on the left/start */}
         <div style={{ position: "relative", background: "var(--cream-panel)", borderInlineEnd: "1px solid var(--border-hair)" }}>
           <RoomViewer assets={assets} selectedAssetId={selectedId} onSelectAsset={setSelectedId} paused={paused} />
@@ -65,7 +65,7 @@ function RoomScreen({ lang, pid, rid }) {
 
           {/* Selected asset preview popover */}
           {selected && (
-            <div className="fade-up" style={{ position: "absolute", bottom: 22, insetInlineEnd: 22, width: 320, background: "var(--cream-page)", border: "1px solid var(--brass)", borderRadius: 8, padding: 18 }}>
+            <div className="fade-up" style={{ position: "absolute", bottom: 22, insetInlineEnd: 22, width: "min(320px, 90vw)", background: "var(--cream-page)", border: "1px solid var(--brass)", borderRadius: 8, padding: 18 }}>
               <div className="label">{lang === "ar" ? "أصل مختار" : "Selected asset"}</div>
               <h4 className="serif" style={{ fontSize: 18, marginTop: 4, fontWeight: 400 }}>{selected.itemName[lang]}</h4>
               <div className="divider" style={{ margin: "10px 0" }}/>

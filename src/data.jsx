@@ -8,14 +8,14 @@ const TODAY = new Date("2026-05-08");
 
 // ---------- Users ----------
 const USERS = [
-  { id: "u-admin", name: { en: "Khalid Al-Mannai", ar: "خالد المناعي" }, role: "admin", email: "k.almannai@mofa.gov.bh", initial: "خ" },
-  { id: "u-pm-london", name: { en: "Amal Al-Khalifa", ar: "أمل آل خليفة" }, role: "property-manager", email: "a.alkhalifa@mofa.gov.bh", initial: "أ" },
-  { id: "u-pm-paris",  name: { en: "Yousif Al-Dosari",  ar: "يوسف الدوسري" }, role: "property-manager", email: "y.aldosari@mofa.gov.bh",  initial: "ي" },
-  { id: "u-pm-tokyo",  name: { en: "Hessa Al-Sulaiti",  ar: "حصة السليطي" }, role: "property-manager", email: "h.alsulaiti@mofa.gov.bh", initial: "ح" },
-  { id: "u-pm-wash",   name: { en: "Faisal Buhazza",    ar: "فيصل بوهزاع" }, role: "property-manager", email: "f.buhazza@mofa.gov.bh",   initial: "ف" },
-  { id: "u-insp-eu",   name: { en: "Maryam Al-Awadhi",  ar: "مريم العوضي" }, role: "inspector", email: "m.alawadhi@mofa.gov.bh", initial: "م" },
-  { id: "u-insp-as",   name: { en: "Saad Al-Binali",    ar: "سعد البنعلي" }, role: "inspector", email: "s.albinali@mofa.gov.bh", initial: "س" },
-  { id: "u-aud",       name: { en: "Reem Al-Zayani",    ar: "ريم الزياني" }, role: "auditor", email: "r.alzayani@mofa.gov.bh", initial: "ر" },
+  { id: "u-admin",    name: { en: "Khalid Al-Mannai",  ar: "خالد المناعي"  }, role: "admin",            postingId: null,             email: "k.almannai@mofa.gov.bh",   initial: "خ" },
+  { id: "u-pm-london",name: { en: "Amal Al-Khalifa",   ar: "أمل آل خليفة"  }, role: "property-manager", postingId: "post-london",    email: "a.alkhalifa@mofa.gov.bh",  initial: "أ", lastLogin: "2026-05-08T08:30:00" },
+  { id: "u-pm-paris", name: { en: "Yousif Al-Dosari",  ar: "يوسف الدوسري"  }, role: "property-manager", postingId: "post-paris",     email: "y.aldosari@mofa.gov.bh",   initial: "ي", lastLogin: "2026-05-07T14:10:00" },
+  { id: "u-pm-tokyo", name: { en: "Hessa Al-Sulaiti",  ar: "حصة السليطي"   }, role: "property-manager", postingId: "post-tokyo",     email: "h.alsulaiti@mofa.gov.bh",  initial: "ح", lastLogin: "2026-05-08T09:01:00" },
+  { id: "u-pm-wash",  name: { en: "Faisal Buhazza",    ar: "فيصل بوهزاع"   }, role: "property-manager", postingId: "post-washington", email: "f.buhazza@mofa.gov.bh",    initial: "ف", lastLogin: "2026-05-06T11:45:00" },
+  { id: "u-insp-eu",  name: { en: "Maryam Al-Awadhi",  ar: "مريم العوضي"   }, role: "inspector",        postingId: "post-london",    email: "m.alawadhi@mofa.gov.bh",   initial: "م", lastLogin: "2026-05-05T10:20:00" },
+  { id: "u-insp-as",  name: { en: "Saad Al-Binali",    ar: "سعد البنعلي"   }, role: "inspector",        postingId: "post-tokyo",     email: "s.albinali@mofa.gov.bh",   initial: "س", lastLogin: "2026-05-04T16:00:00" },
+  { id: "u-aud",      name: { en: "Reem Al-Zayani",    ar: "ريم الزياني"   }, role: "auditor",          postingId: null,             email: "r.alzayani@mofa.gov.bh",   initial: "ر", lastLogin: "2026-05-08T07:55:00" },
 ];
 const CURRENT_USER = USERS[0];
 

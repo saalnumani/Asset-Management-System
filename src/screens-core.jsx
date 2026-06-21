@@ -1,4 +1,4 @@
-/* global window, React, t, fmtCurrency, fmtNumber, fmtDate, Icon, DiamondRule, navigate, Pill, StatCard, SectionHead, CountUp, CrestMark, GlobeHero, BuildingCover, FacadeViewer, PROPERTIES, getProperty, REMINDERS, AUDIT, APPROVALS, MAINT_SERIES, ASSET_DISTRIBUTION, USERS, getRooms, FLOORS, GIFTS_RECEIVED, getVehiclesForProperty, getMaintenance, getKitchenItems, getGardenItems, getBills, getEvents, getDocuments, getSecuritySystem, CAMERA_ZONES */
+/* global window, React, t, fmtCurrency, fmtNumber, fmtDate, Icon, DiamondRule, navigate, Pill, StatCard, SectionHead, CountUp, CrestMark, GlobeHero, BuildingCover, FacadeViewer, PROPERTIES, getProperty, REMINDERS, AUDIT, APPROVALS, MAINT_SERIES, ASSET_DISTRIBUTION, USERS, getRooms, FLOORS, GIFTS_RECEIVED, getVehiclesForProperty, getMaintenance, getKitchenItems, getGardenItems, getBills, getEvents, getDocuments, getSecuritySystem, CAMERA_ZONES, useCurrentRole, can */
 // ============================================================
 // Core screens: Login, Dashboard, Properties listing, Property detail
 // ============================================================
@@ -66,10 +66,16 @@ function LoginScreen({ lang }) {
 // DASHBOARD — section 7.2
 // =============================================================
 function Dashboard({ lang, activePropId }) {
-  const totalAssets = PROPERTIES.reduce((s, p) => s + p.totalAssetsCount, 0);
-  const totalValue = PROPERTIES.reduce((s, p) => s + p.totalAssetsValue, 0);
-  const handovers = PROPERTIES.filter(p => p.status === "handover-in-progress").length;
+  const { user } = useCurrentRole();
+  const myProps = user.postingId
+    ? PROPERTIES.filter(p => p.postingId === user.postingId)
+    : PROPERTIES;
+
+  const totalAssets = myProps.reduce((s, p) => s + p.totalAssetsCount, 0);
+  const totalValue = myProps.reduce((s, p) => s + p.totalAssetsValue, 0);
+  const handovers = myProps.filter(p => p.status === "handover-in-progress").length;
   const greeting = new Date().getHours() < 12 ? "morning" : "afternoon";
+  const isHQ = !user.postingId;
 
   return (
     <div className="page-enter">
@@ -90,9 +96,13 @@ function Dashboard({ lang, activePropId }) {
             <div style={{ fontSize: 11, color: "rgba(217,195,155,0.85)", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 10 }}>
               {fmtDate(new Date().toISOString(), lang)}
             </div>
-            <h1>{t(greeting, lang)}, {window.CURRENT_USER.name[lang].split(" ")[0]}</h1>
+            <h1>{t(greeting, lang)}, {user.name[lang].split(" ")[0]}</h1>
             <div className="meta">
-              {t(PROPERTIES.length === 1 ? "properties_count_one" : "properties_count_many", lang, { n: PROPERTIES.length, h: handovers })}
+              {user.postingId
+                ? (lang === "ar"
+                  ? `${myProps[0]?.name[lang] ?? ""} — ${myProps.length} ${myProps.length === 1 ? "عقار" : "عقارات"}`
+                  : `${myProps[0]?.city?.en ?? ""} Posting — ${myProps.length} ${myProps.length === 1 ? "property" : "properties"}`)
+                : t(PROPERTIES.length === 1 ? "properties_count_one" : "properties_count_many", lang, { n: PROPERTIES.length, h: handovers })}
             </div>
           </div>
           <div className="cta">
@@ -104,9 +114,9 @@ function Dashboard({ lang, activePropId }) {
         </div>
 
         {/* Stat cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginTop: 28 }}>
-          <StatCard label={t("stat_properties", lang)} value={PROPERTIES.length} accent
-            meta={`${PROPERTIES.filter(p => p.status === "active").length} active · ${handovers} in handover`} />
+        <div className="mob-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginTop: 28 }}>
+          <StatCard label={t("stat_properties", lang)} value={myProps.length} accent
+            meta={`${myProps.filter(p => p.status === "active").length} active · ${handovers} in handover`} />
           <StatCard label={t("stat_assets_value", lang)} value={totalValue} prefix="BHD "
             meta={`${fmtNumber(totalAssets)} items registered`} />
           <StatCard label={t("stat_pending_maint", lang)} value={9}
@@ -116,7 +126,7 @@ function Dashboard({ lang, activePropId }) {
         </div>
 
         {/* Two-column: charts */}
-        <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 16, marginTop: 16 }}>
+        <div className="mob-grid-1" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 16, marginTop: 16 }}>
           <div className="card" style={{ padding: 28 }}>
             <SectionHead title={t("chart_maint_spend", lang)} kicker={t("sec_operations", lang)} lang={lang} />
             <MaintChart lang={lang} />
@@ -141,12 +151,12 @@ function Dashboard({ lang, activePropId }) {
             <Icon name={lang === "ar" ? "arrow_left" : "arrow_right"} size={14} />
           </a>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
-          {PROPERTIES.map(p => <MiniPropertyCard key={p.id} prop={p} lang={lang} />)}
+        <div className="mob-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
+          {myProps.map(p => <MiniPropertyCard key={p.id} prop={p} lang={lang} />)}
         </div>
 
         {/* Reminders + activity + approvals — three columns */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginTop: 32 }}>
+        <div className="mob-grid-1" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginTop: 32 }}>
           <div className="card">
             <SectionHead title={t("upcoming_reminders", lang)} kicker={t("nav_reminders", lang)} lang={lang} />
             <div className="timeline" style={{ marginTop: 8 }}>
@@ -180,6 +190,7 @@ function Dashboard({ lang, activePropId }) {
             </div>
           </div>
 
+          {can(user, "approve-request") && (
           <div className="card">
             <SectionHead title={t("pending_approvals", lang)} kicker={t("nav_approvals", lang)} lang={lang} />
             <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 6 }}>
@@ -200,6 +211,7 @@ function Dashboard({ lang, activePropId }) {
               })}
             </div>
           </div>
+          )}
         </div>
       </div>
     </div>
@@ -327,6 +339,11 @@ function MiniPropertyCard({ prop, lang }) {
 // PROPERTIES LISTING — section 7.3
 // =============================================================
 function PropertiesScreen({ lang }) {
+  const { user } = useCurrentRole();
+  const myProps = user.postingId
+    ? PROPERTIES.filter(p => p.postingId === user.postingId)
+    : PROPERTIES;
+
   return (
     <div className="page-enter">
       <window.Breadcrumbs lang={lang} items={[
@@ -339,19 +356,20 @@ function PropertiesScreen({ lang }) {
             <DiamondRule />
             <h1 style={{ marginTop: 6 }}>{t("nav_all_properties", lang)}</h1>
             <div className="sub">{lang === "ar"
-              ? `${PROPERTIES.length} عقارات تحت إشراف الوزارة في ${new Set(PROPERTIES.map(p=>p.country.en)).size} دول`
-              : `${PROPERTIES.length} properties under ministry custody across ${new Set(PROPERTIES.map(p=>p.country.en)).size} countries`}</div>
+              ? `${myProps.length} عقارات تحت إشراف الوزارة في ${new Set(myProps.map(p=>p.country.en)).size} دول`
+              : `${myProps.length} properties under ministry custody across ${new Set(myProps.map(p=>p.country.en)).size} countries`}</div>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
             <button className="btn btn--secondary"><Icon name="filter" size={14}/>{lang === "ar" ? "تصفية" : "Filter"}</button>
             <button className="btn btn--secondary"><Icon name="download" size={14}/>{t("export_pdf", lang)}</button>
-            <button className="btn btn--primary"><Icon name="plus" size={14}/>{lang === "ar" ? "تسجيل عقار" : "Register property"}</button>
+            {can(user, "register-property") && (
+              <button className="btn btn--primary"><Icon name="plus" size={14}/>{lang === "ar" ? "تسجيل عقار" : "Register property"}</button>
+            )}
           </div>
         </div>
 
-        {/* 4 large property cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 24 }}>
-          {PROPERTIES.map(p => <LargePropertyCard key={p.id} prop={p} lang={lang} />)}
+        <div className="mob-grid-1" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 24 }}>
+          {myProps.map(p => <LargePropertyCard key={p.id} prop={p} lang={lang} />)}
         </div>
       </div>
     </div>
@@ -377,7 +395,7 @@ function LargePropertyCard({ prop, lang }) {
         <h3 style={{ fontSize: 26 }}>{prop.name[lang]}</h3>
         <div className="muted" style={{ fontSize: 12 }}>{prop.address[lang]}</div>
         <div className="divider" style={{ margin: "8px 0" }}/>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
+        <div className="mob-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
           <div><div className="label">{t("rooms", lang)}</div><div className="serif" style={{ fontSize: 22, color: "var(--forest)" }}>{prop.rooms}</div></div>
           <div><div className="label">{t("assets", lang)}</div><div className="serif" style={{ fontSize: 22, color: "var(--forest)" }}>{prop.totalAssetsCount}</div></div>
           <div><div className="label">{t("area", lang)}</div><div className="serif" style={{ fontSize: 22, color: "var(--forest)" }}>{fmtNumber(prop.totalArea)} m²</div></div>
@@ -393,6 +411,81 @@ function LargePropertyCard({ prop, lang }) {
         </div>
       </div>
     </a>
+  );
+}
+
+// =============================================================
+// =============================================================
+// STAFF SCREEN — embassy users only
+// =============================================================
+const ROLE_LABELS = {
+  "property-manager": { en: "Property Manager", ar: "مدير العقار" },
+  "inspector":        { en: "Inspector",         ar: "مفتش" },
+  "auditor":          { en: "Auditor",           ar: "مدقق" },
+  "embassy-admin":    { en: "Embassy Admin",     ar: "مدير السفارة" },
+  "embassy-staff":    { en: "Embassy Staff",     ar: "موظف سفارة" },
+  "admin":            { en: "Admin",             ar: "مدير" },
+};
+
+function StaffScreen({ lang }) {
+  const { user } = useCurrentRole();
+  const myProps = PROPERTIES.filter(p => p.postingId === user.postingId);
+  const posting = myProps[0];
+  const staff = USERS.filter(u => u.postingId === user.postingId);
+
+  return (
+    <div className="page-enter">
+      <window.Breadcrumbs lang={lang} items={[
+        { label: t("sec_dashboard", lang), path: "/dashboard" },
+        { label: lang === "ar" ? "فريق العمل" : "My Staff" },
+      ]}/>
+      <div className="page page--wide" style={{ paddingTop: 16 }}>
+        <div className="page-head">
+          <div>
+            <DiamondRule />
+            <h1 style={{ marginTop: 6 }}>{lang === "ar" ? "فريق العمل" : "My Staff"}</h1>
+            <div className="sub">
+              {posting
+                ? (lang === "ar"
+                  ? `${staff.length} موظف في ${posting.city.ar}`
+                  : `${staff.length} staff member${staff.length !== 1 ? "s" : ""} at ${posting.city.en}`)
+                : ""}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginTop: 8 }}>
+          {staff.map(u => (
+            <div key={u.id} className="card" style={{ padding: "20px 22px", display: "flex", flexDirection: "column", gap: 10 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <div style={{
+                  width: 44, height: 44, borderRadius: "50%",
+                  background: "var(--brass)", color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: "var(--font-serif)", fontSize: 18, flexShrink: 0,
+                }}>
+                  {u.initial}
+                </div>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: 14 }}>{u.name[lang]}</div>
+                  <div style={{ fontSize: 11, color: "var(--ink-soft)", marginTop: 2 }}>
+                    {(ROLE_LABELS[u.role] || { en: u.role, ar: u.role })[lang]}
+                  </div>
+                </div>
+              </div>
+              <div style={{ borderTop: "1px solid var(--border-faint)", paddingTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
+                <div style={{ fontSize: 12, color: "var(--ink-soft)" }}>{u.email}</div>
+                {u.lastLogin && (
+                  <div style={{ fontSize: 11, color: "var(--ink-faint)" }}>
+                    {lang === "ar" ? "آخر دخول" : "Last login"}: {fmtDate(u.lastLogin, lang)}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -420,7 +513,7 @@ function PropertyScreen({ lang, pid }) {
 
       <div className="page page--wide" style={{ paddingTop: 14 }}>
         {/* Header band: 3D facade + facts */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: 24, alignItems: "stretch" }}>
+        <div className="mob-grid-1" style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: 24, alignItems: "stretch" }}>
           <div style={{ position: "relative", height: 380, borderRadius: 12, overflow: "hidden", border: "1px solid var(--border-hair)", background: "#0F1A33" }}>
             <FacadeViewer arch={prop.arch} />
             <div style={{ position: "absolute", top: 18, insetInlineStart: 22, color: "var(--cream-page)" }}>
@@ -532,7 +625,7 @@ function Fact({ label, value }) {
 
 function PropertyOverview({ prop, lang }) {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 20 }}>
+    <div className="mob-grid-1" style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 20 }}>
       <div className="card" style={{ padding: 32 }}>
         <div className="label">{lang === "ar" ? "وصف العقار" : "Property dossier"}</div>
         <h2 className="serif" style={{ fontSize: 24, marginTop: 6 }}>{prop.name[lang]}</h2>
@@ -542,7 +635,7 @@ function PropertyOverview({ prop, lang }) {
             : `Acquired by the Ministry on ${fmtDate(prop.acquiredDate, "en")}, this ${prop.totalArea} m² ${prop.type === "embassy+residence" ? "embassy & residence" : "embassy"} in ${prop.city.en} comprises ${prop.rooms} rooms across multiple floors, with ${prop.hasGarden ? "a garden, " : ""}${prop.hasPool ? "a pool, " : ""}formal reception halls and guest accommodation.`}
         </p>
         <div className="divider" style={{ margin: "20px 0" }} />
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18 }}>
+        <div className="mob-grid-1" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18 }}>
           <Stat2 label={lang==="ar"?"الفئة":"Classification"} value={lang==="ar"?"الفئة الأولى":"Category I"} />
           <Stat2 label={lang==="ar"?"التأمين":"Insurance"} value="Lloyd's of London" />
           <Stat2 label={lang==="ar"?"السجل العقاري":"Land registry"} value="—" />
@@ -576,7 +669,7 @@ function Stat2({ label, value }) {
 function PropertyRooms({ prop, rooms, lang }) {
   if (!rooms.length) return <div className="muted" style={{ padding: 40, textAlign: "center" }}>—</div>;
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+    <div className="mob-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
       {rooms.map(r => (
         <a key={r.id} href={`#/properties/${prop.id}/rooms/${r.id}`} className="card" style={{ padding: 0, overflow: "hidden", display: "flex", flexDirection: "column", textDecoration: "none", color: "var(--ink)" }}>
           <div style={{ height: 140, background: "var(--cream-panel)", position: "relative", display: "grid", placeItems: "center" }}>
@@ -803,7 +896,7 @@ function PropertyPhotos({ prop, rooms, lang }) {
     <div className="card" style={{ padding: 28 }}>
       <TabHead title={lang === "ar" ? "أرشيف الصور" : "Photo Archive"} kicker={lang === "ar" ? "صور الغرف والأصول" : "Rooms & assets"} lang={lang}
         action={<button className="btn btn--secondary btn--sm"><Icon name="plus" size={13}/>{lang === "ar" ? "رفع صور" : "Upload photos"}</button>} />
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+      <div className="mob-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
         {zones.map((r, i) => (
           <div key={r.id} style={{ border: "1px solid var(--border-faint)", borderRadius: 8, overflow: "hidden" }}>
             <div style={{ height: 100, background: `hsl(${210 + i * 12}, 18%, ${88 - i % 3 * 4}%)`, display: "grid", placeItems: "center", position: "relative" }}>
@@ -903,7 +996,7 @@ function PropertyGarden({ prop, lang }) {
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div className="card" style={{ padding: 28 }}>
         <TabHead title={lang === "ar" ? "الحديقة والمسبح" : "Garden & Pool"} kicker={lang === "ar" ? "المنشآت الخارجية" : "Outdoor facilities"} lang={lang} />
-        <div style={{ display: "flex", gap: 20, marginBottom: 20 }}>
+        <div className="mob-stack" style={{ display: "flex", gap: 20, marginBottom: 20 }}>
           <div style={{ flex: 1, padding: "14px 18px", border: "1px solid var(--border-faint)", borderRadius: 8, display: "flex", alignItems: "center", gap: 12 }}>
             <Icon name="home" size={24} style={{ color: "var(--forest)", opacity: 0.6 }} />
             <div>
@@ -966,7 +1059,7 @@ function PropertyBills({ prop, lang }) {
     <div className="card" style={{ padding: 28 }}>
       <TabHead title={lang === "ar" ? "الفواتير والمصروفات" : "Bills & Expenses"} kicker={lang === "ar" ? "المصروفات" : "Expenses"} lang={lang}
         action={<button className="btn btn--secondary btn--sm"><Icon name="plus" size={13}/>{lang === "ar" ? "إضافة فاتورة" : "Add bill"}</button>} />
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginBottom: 20 }}>
+      <div className="mob-grid-1" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginBottom: 20 }}>
         <div style={{ padding: "16px 18px", background: "var(--cream-panel)", borderRadius: 8 }}>
           <div className="label">{lang === "ar" ? "إجمالي الفواتير" : "Total this month"}</div>
           <div className="serif" style={{ fontSize: 26, color: "var(--forest)", marginTop: 4 }}>BHD {fmtNumber(total)}</div>
@@ -1087,7 +1180,7 @@ function PropertySecurity({ prop, lang }) {
   const n = Math.min(sys.cameras, CAMERA_ZONES.length);
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
+      <div className="mob-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
         {[
           { label: lang === "ar" ? "كاميرات المراقبة" : "CCTV Cameras", value: sys.cameras, icon: "home" },
           { label: lang === "ar" ? "نقاط الوصول" : "Access Points", value: sys.accessPoints, icon: "key" },
@@ -1102,7 +1195,7 @@ function PropertySecurity({ prop, lang }) {
       </div>
       <div className="card" style={{ padding: 28 }}>
         <TabHead title={lang === "ar" ? "تغطية الكاميرات" : "Camera Coverage"} kicker={lang === "ar" ? "نظام المراقبة" : "CCTV zones"} lang={lang} />
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+        <div className="mob-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
           {CAMERA_ZONES.slice(0, n).map((z, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 14px", border: "1px solid var(--border-faint)", borderRadius: 8 }}>
               <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--positive)", flexShrink: 0 }} />
@@ -1214,12 +1307,12 @@ function PropertyFloorPlan({ prop, rooms, lang }) {
               const f = floors.find(fl => fl.id === activeFloor);
               return (
                 <div>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 16 }}>
+                  <div className="mob-grid-1" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 16 }}>
                     <Fact label={lang === "ar" ? "اسم الطابق" : "Floor"} value={lang === "ar" ? f.name.ar : f.name.en} />
                     <Fact label={lang === "ar" ? "المساحة" : "Area"} value={`${fmtNumber(f.area)} m²`} />
                     <Fact label={lang === "ar" ? "عدد الغرف" : "Rooms"} value={f.roomCount} />
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                  <div className="mob-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                     {(floorRooms.length > 0 ? floorRooms : rooms.slice(0, 6)).map(r => (
                       <a key={r.id} href={`#/properties/${prop.id}/rooms/${r.id}`}
                         style={{ padding: "14px 16px", border: "1px solid var(--border-faint)", borderRadius: 8, display: "flex", alignItems: "center", gap: 12, textDecoration: "none", color: "var(--ink)" }}>
@@ -1245,7 +1338,328 @@ function PropertyFloorPlan({ prop, rooms, lang }) {
   );
 }
 
+// =============================================================
+// REMINDERS SCREEN
+// =============================================================
+function RemindersScreen({ lang }) {
+  const { user } = useCurrentRole();
+  const items = user.postingId
+    ? REMINDERS.filter(r => {
+        const prop = PROPERTIES.find(p => p.id === r.propertyId);
+        return prop && prop.postingId === user.postingId;
+      })
+    : REMINDERS;
+
+  const groups = [
+    { key: "overdue",  label: { en: "Overdue", ar: "متأخر" },   tone: "critical" },
+    { key: "due-soon", label: { en: "Due Soon", ar: "قريباً" },  tone: "warning" },
+    { key: "upcoming", label: { en: "Upcoming", ar: "قادم" },    tone: "neutral" },
+  ];
+
+  return (
+    <div className="page-enter">
+      <window.Breadcrumbs lang={lang} items={[
+        { label: t("sec_dashboard", lang), path: "/dashboard" },
+        { label: t("nav_reminders", lang) },
+      ]}/>
+      <div className="page page--wide" style={{ paddingTop: 16 }}>
+        <div className="page-head">
+          <div><DiamondRule /><h1 style={{ marginTop: 6 }}>{t("nav_reminders", lang)}</h1></div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+          {groups.map(g => {
+            const rows = items.filter(r => r.status === g.key);
+            if (!rows.length) return null;
+            return (
+              <div key={g.key} className="card" style={{ padding: 24 }}>
+                <SectionHead title={lang === "ar" ? g.label.ar : g.label.en} kicker={`${rows.length}`} lang={lang} />
+                <div className="timeline" style={{ marginTop: 12 }}>
+                  {rows.map(r => {
+                    const prop = PROPERTIES.find(p => p.id === r.propertyId);
+                    return (
+                      <div className="row" key={r.id}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <span style={{ fontSize: 13, fontWeight: 500 }}>{r.title[lang]}</span>
+                          <Pill tone={g.tone} dot>{lang === "ar" ? g.label.ar : g.label.en}</Pill>
+                        </div>
+                        <div style={{ fontSize: 11, color: "var(--ink-faint)" }}>
+                          {fmtDate(r.dueDate, lang)}
+                          {prop ? ` · ${prop.city[lang]}` : ""}
+                          {` · ${r.category}`}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// =============================================================
+// MAINTENANCE SCREEN
+// =============================================================
+function MaintenanceScreen({ lang }) {
+  const { user } = useCurrentRole();
+  const myProps = user.postingId
+    ? PROPERTIES.filter(p => p.postingId === user.postingId)
+    : PROPERTIES;
+  const allMaint = myProps.flatMap(p => (window.getMaintenance || (() => []))(p.id));
+
+  const STATUS_TONE = { overdue: "critical", "in-progress": "warning", scheduled: "neutral", completed: "positive" };
+  const STATUS_LABEL = {
+    overdue:     { en: "Overdue",     ar: "متأخر" },
+    "in-progress":{ en: "In Progress", ar: "جارٍ" },
+    scheduled:   { en: "Scheduled",   ar: "مجدول" },
+    completed:   { en: "Completed",   ar: "مكتمل" },
+  };
+
+  const groups = ["overdue","in-progress","scheduled","completed"];
+
+  return (
+    <div className="page-enter">
+      <window.Breadcrumbs lang={lang} items={[
+        { label: t("sec_dashboard", lang), path: "/dashboard" },
+        { label: t("nav_maintenance", lang) },
+      ]}/>
+      <div className="page page--wide" style={{ paddingTop: 16 }}>
+        <div className="page-head">
+          <div><DiamondRule /><h1 style={{ marginTop: 6 }}>{t("nav_maintenance", lang)}</h1>
+            <div className="sub">{allMaint.length} {lang === "ar" ? "مهمة" : "tasks"}</div>
+          </div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          {groups.map(status => {
+            const rows = allMaint.filter(m => m.status === status);
+            if (!rows.length) return null;
+            const lbl = STATUS_LABEL[status] || { en: status, ar: status };
+            return (
+              <div key={status} className="card" style={{ padding: 0, overflow: "hidden" }}>
+                <div style={{ padding: "14px 20px", borderBottom: "1px solid var(--border-faint)", display: "flex", alignItems: "center", gap: 10 }}>
+                  <Pill tone={STATUS_TONE[status]} dot>{lang === "ar" ? lbl.ar : lbl.en}</Pill>
+                  <span style={{ fontSize: 12, color: "var(--ink-faint)" }}>{rows.length}</span>
+                </div>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                  <tbody>
+                    {rows.slice(0, 10).map(m => {
+                      const prop = PROPERTIES.find(p => p.id === m.propertyId);
+                      return (
+                        <tr key={m.id} style={{ borderBottom: "1px solid var(--border-faint)" }}>
+                          <td style={{ padding: "10px 20px" }}>{m.description?.[lang] ?? m.description?.en ?? m.id}</td>
+                          <td style={{ padding: "10px 12px", color: "var(--ink-soft)" }}>{m.category}</td>
+                          <td style={{ padding: "10px 12px", color: "var(--ink-soft)" }}>{prop?.city?.[lang]}</td>
+                          <td style={{ padding: "10px 20px", textAlign: "end", color: "var(--forest)", fontFamily: "var(--font-mono)" }}>
+                            {m.cost ? `${fmtNumber(m.cost)} BHD` : "—"}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// =============================================================
+// FLEET SCREEN
+// =============================================================
+function FleetScreen({ lang }) {
+  const { user } = useCurrentRole();
+  const myProps = user.postingId
+    ? PROPERTIES.filter(p => p.postingId === user.postingId)
+    : PROPERTIES;
+  const vehicles = myProps.flatMap(p => (window.getVehiclesForProperty || (() => []))(p.id));
+
+  const COND_TONE = { good: "positive", fair: "warning", poor: "critical" };
+
+  return (
+    <div className="page-enter">
+      <window.Breadcrumbs lang={lang} items={[
+        { label: t("sec_dashboard", lang), path: "/dashboard" },
+        { label: t("nav_fleet", lang) },
+      ]}/>
+      <div className="page page--wide" style={{ paddingTop: 16 }}>
+        <div className="page-head">
+          <div><DiamondRule /><h1 style={{ marginTop: 6 }}>{t("nav_fleet", lang)}</h1>
+            <div className="sub">{vehicles.length} {lang === "ar" ? "مركبة" : "vehicles"}</div>
+          </div>
+        </div>
+        <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+            <thead>
+              <tr style={{ borderBottom: "1px solid var(--border-hair)", background: "var(--cream-panel)" }}>
+                {["Make / Model","Year","Plate","Odometer","Condition","Property"].map(h => (
+                  <th key={h} style={{ padding: "12px 16px", textAlign: "start", fontWeight: 500, fontSize: 11, color: "var(--ink-soft)", letterSpacing: ".06em", textTransform: "uppercase" }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {vehicles.map(v => {
+                const prop = PROPERTIES.find(p => p.id === v.propertyId);
+                return (
+                  <tr key={v.id} style={{ borderBottom: "1px solid var(--border-faint)" }}>
+                    <td style={{ padding: "12px 16px", fontWeight: 500 }}>{v.make} {v.model}</td>
+                    <td style={{ padding: "12px 16px", color: "var(--ink-soft)" }}>{v.year}</td>
+                    <td style={{ padding: "12px 16px", fontFamily: "var(--font-mono)", fontSize: 12 }}>{v.plate}</td>
+                    <td style={{ padding: "12px 16px", color: "var(--ink-soft)" }}>{v.odometer ? `${fmtNumber(v.odometer)} km` : "—"}</td>
+                    <td style={{ padding: "12px 16px" }}>
+                      <Pill tone={COND_TONE[v.condition] || "neutral"} dot>
+                        {v.condition ? (v.condition.charAt(0).toUpperCase() + v.condition.slice(1)) : "—"}
+                      </Pill>
+                    </td>
+                    <td style={{ padding: "12px 16px", color: "var(--ink-soft)" }}>{prop?.city?.[lang]}</td>
+                  </tr>
+                );
+              })}
+              {!vehicles.length && (
+                <tr><td colSpan={6} style={{ padding: 40, textAlign: "center", color: "var(--ink-faint)" }}>
+                  {lang === "ar" ? "لا توجد مركبات مسجلة" : "No vehicles registered"}
+                </td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// =============================================================
+// BILLS & LEDGER SCREEN
+// =============================================================
+function BillsScreen({ lang }) {
+  const { user } = useCurrentRole();
+  const myProps = user.postingId
+    ? PROPERTIES.filter(p => p.postingId === user.postingId)
+    : PROPERTIES;
+  const bills = myProps.flatMap(p => (window.getBills || (() => []))(p.id));
+  const total = bills.reduce((s, b) => s + (b.amount || 0), 0);
+
+  return (
+    <div className="page-enter">
+      <window.Breadcrumbs lang={lang} items={[
+        { label: t("sec_dashboard", lang), path: "/dashboard" },
+        { label: t("nav_bills", lang) },
+      ]}/>
+      <div className="page page--wide" style={{ paddingTop: 16 }}>
+        <div className="page-head">
+          <div><DiamondRule /><h1 style={{ marginTop: 6 }}>{t("nav_bills", lang)}</h1>
+            <div className="sub">
+              {bills.length} {lang === "ar" ? "فاتورة" : "bills"} · {lang === "ar" ? "الإجمالي" : "Total"}: {fmtCurrency(total, "BHD", lang)}
+            </div>
+          </div>
+        </div>
+        <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+            <thead>
+              <tr style={{ borderBottom: "1px solid var(--border-hair)", background: "var(--cream-panel)" }}>
+                {(lang === "ar"
+                  ? ["النوع","المبلغ","التاريخ","طريقة الدفع","مرتبط بـ","العقار","ملاحظات"]
+                  : ["Type","Amount","Date","Payment","Linked to","Property","Notes"]
+                ).map(h => (
+                  <th key={h} style={{ padding: "12px 16px", textAlign: "start", fontWeight: 500, fontSize: 11, color: "var(--ink-soft)", letterSpacing: ".06em", textTransform: "uppercase" }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {bills.map(b => {
+                const prop = PROPERTIES.find(p => p.id === b.propertyId);
+                const overdue = b.notes?.toLowerCase().includes("overdue");
+                return (
+                  <tr key={b.id} style={{ borderBottom: "1px solid var(--border-faint)" }}>
+                    <td style={{ padding: "12px 16px", fontWeight: 500 }}>{b.type?.[lang] ?? b.type?.en}</td>
+                    <td style={{ padding: "12px 16px", fontFamily: "var(--font-mono)", color: "var(--forest)" }}>{fmtCurrency(b.amount, b.currency, lang)}</td>
+                    <td style={{ padding: "12px 16px", color: "var(--ink-soft)" }}>{fmtDate(b.date, lang)}</td>
+                    <td style={{ padding: "12px 16px", color: "var(--ink-soft)" }}>{b.payment}</td>
+                    <td style={{ padding: "12px 16px", color: "var(--ink-soft)" }}>{b.linkedTo?.[lang] ?? b.linkedTo?.en}</td>
+                    <td style={{ padding: "12px 16px", color: "var(--ink-soft)" }}>{prop?.city?.[lang]}</td>
+                    <td style={{ padding: "12px 16px" }}>
+                      {overdue ? <Pill tone="critical" dot>{lang === "ar" ? "متأخر" : "Overdue"}</Pill> : <span style={{ color: "var(--ink-faint)" }}>—</span>}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// =============================================================
+// EVENTS SCREEN
+// =============================================================
+function EventsScreen({ lang }) {
+  const { user } = useCurrentRole();
+  const myProps = user.postingId
+    ? PROPERTIES.filter(p => p.postingId === user.postingId)
+    : PROPERTIES;
+  const events = myProps.flatMap(p => (window.getEvents || (() => []))(p.id))
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  return (
+    <div className="page-enter">
+      <window.Breadcrumbs lang={lang} items={[
+        { label: t("sec_dashboard", lang), path: "/dashboard" },
+        { label: t("nav_events", lang) },
+      ]}/>
+      <div className="page page--wide" style={{ paddingTop: 16 }}>
+        <div className="page-head">
+          <div><DiamondRule /><h1 style={{ marginTop: 6 }}>{t("nav_events", lang)}</h1>
+            <div className="sub">{events.length} {lang === "ar" ? "فعالية" : "events"}</div>
+          </div>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
+          {events.map(ev => {
+            const prop = PROPERTIES.find(p => p.id === ev.propertyId);
+            const isPast = new Date(ev.date) < new Date();
+            return (
+              <div key={ev.id} className="card" style={{ padding: 20 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: 14 }}>{ev.event?.[lang] ?? ev.event?.en}</div>
+                    <div style={{ fontSize: 12, color: "var(--ink-soft)", marginTop: 4 }}>
+                      {prop?.city?.[lang]} · {ev.location?.[lang] ?? ev.location?.en}
+                    </div>
+                  </div>
+                  <Pill tone={isPast ? "neutral" : "positive"} dot>
+                    {isPast ? (lang === "ar" ? "منتهٍ" : "Past") : (lang === "ar" ? "قادم" : "Upcoming")}
+                  </Pill>
+                </div>
+                <div style={{ display: "flex", gap: 24, marginTop: 14, fontSize: 12 }}>
+                  <div><span style={{ color: "var(--ink-faint)" }}>{lang === "ar" ? "التاريخ" : "Date"}: </span>{fmtDate(ev.date, lang)}</div>
+                  <div><span style={{ color: "var(--ink-faint)" }}>{lang === "ar" ? "الضيوف" : "Guests"}: </span>{ev.guests}</div>
+                  <div><span style={{ color: "var(--ink-faint)" }}>{lang === "ar" ? "الميزانية" : "Budget"}: </span>{fmtCurrency(ev.budget, ev.currency, lang)}</div>
+                </div>
+                {ev.guestList?.length > 0 && (
+                  <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--border-faint)", fontSize: 11, color: "var(--ink-soft)" }}>
+                    {ev.guestList.slice(0, 3).map((g, i) => (
+                      <div key={i}>{g.name?.[lang] ?? g.name?.en} — {g.role?.[lang] ?? g.role?.en}</div>
+                    ))}
+                    {ev.guestList.length > 3 && <div style={{ color: "var(--ink-faint)", marginTop: 2 }}>+{ev.guestList.length - 3} more</div>}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 Object.assign(window, {
-  LoginScreen, Dashboard, PropertiesScreen, PropertyScreen,
+  LoginScreen, Dashboard, PropertiesScreen, PropertyScreen, StaffScreen,
+  RemindersScreen, MaintenanceScreen, FleetScreen, BillsScreen, EventsScreen,
   Fact, Stat2, MaintChart, DonutChart, MiniPropertyCard, LargePropertyCard,
 });

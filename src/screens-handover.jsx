@@ -45,7 +45,7 @@ function HandoverScreen({ lang, hid }) {
 
       <div className="page page--wide" style={{ paddingTop: 14 }}>
         {/* ==== Header ==== */}
-        <div style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: 24, marginBottom: 20 }}>
+        <div className="mob-stack" style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: 24, marginBottom: 20 }}>
           <div>
             <DiamondRule />
             <div className="label" style={{ marginTop: 8 }}>{t("handover_in_progress", lang)} · {prop.city[lang]}</div>
@@ -93,7 +93,7 @@ function HandoverScreen({ lang, hid }) {
           <div className="progress" style={{ height: 8 }}>
             <div className="progress-fill" style={{ width: progress + "%", background: "linear-gradient(90deg, var(--brass) 0%, var(--brass-deep) 100%)" }}/>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginTop: 22 }}>
+          <div className="mob-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginTop: 22 }}>
             <Stat label={t("items_total", lang)} value={counts.all} accent />
             <Stat label={t("items_verified", lang)} value={counts.verified} tone="positive" />
             <Stat label={t("items_disputed", lang)} value={counts.disputed} tone="warning" />
@@ -102,7 +102,7 @@ function HandoverScreen({ lang, hid }) {
         </div>
 
         {/* ==== Two outgoing/incoming ambassadors ==== */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 60px 1fr", gap: 0, alignItems: "stretch", marginBottom: 24 }}>
+        <div className="mob-stack" style={{ display: "grid", gridTemplateColumns: "1fr 60px 1fr", gap: 0, alignItems: "stretch", marginBottom: 24 }}>
           <AmbCard ambassador={ho.outgoingResident} role={t("role_outgoing", lang)} signoff={ho.signoffs.outgoing} lang={lang}/>
           <div style={{ display: "grid", placeItems: "center", color: "var(--brass)" }}>
             <Icon name={lang === "ar" ? "arrow_left" : "arrow_right"} size={24} />

@@ -1,4 +1,4 @@
-/* global window, React, ReactDOM, useRoute, TopBar, Sidebar, LoginScreen, Dashboard, PropertiesScreen, PropertyScreen, RoomScreen, HandoverScreen, StubByName, PROPERTIES, HO_CATEGORIES */
+/* global window, React, ReactDOM, useRoute, TopBar, Sidebar, LoginScreen, Dashboard, PropertiesScreen, PropertyScreen, RoomScreen, HandoverScreen, StaffScreen, RemindersScreen, MaintenanceScreen, FleetScreen, BillsScreen, EventsScreen, StubByName, PROPERTIES, HO_CATEGORIES */
 
 // Expose HO_CATEGORIES globally for chip filter (if not already)
 if (!window.HO_CATEGORIES) {
@@ -22,6 +22,7 @@ function App() {
   const { useState, useEffect } = React;
   const [lang, setLang] = useState("ar");
   const [activePropId, setActivePropId] = useState("prop-tokyo");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const route = useRoute();
 
   useEffect(() => {
@@ -36,22 +37,32 @@ function App() {
     }
   }, [route.name, route.params.pid]);
 
+  // Close sidebar on navigation
+  useEffect(() => { setSidebarOpen(false); }, [route.name, route.params.pid]);
+
   // Hide shell on login (keep this AFTER all hooks)
   if (route.name === "login") return <LoginScreen lang={lang} />;
 
   return (
     <div className="app-shell" key={lang}>
       <TopBar lang={lang} setLang={setLang}
-        activePropId={activePropId} setActivePropId={setActivePropId} />
-      <Sidebar lang={lang} route={route} />
+        activePropId={activePropId} setActivePropId={setActivePropId}
+        onMenuClick={() => setSidebarOpen(v => !v)} />
+      <Sidebar lang={lang} route={route} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <main className="main">
         {route.name === "dashboard"  && <Dashboard lang={lang} activePropId={activePropId} />}
         {route.name === "properties" && <PropertiesScreen lang={lang} />}
         {route.name === "property"   && <PropertyScreen lang={lang} pid={route.params.pid} />}
         {route.name === "room"       && <RoomScreen lang={lang} pid={route.params.pid} rid={route.params.rid} />}
-        {route.name === "handover"   && <HandoverScreen lang={lang} hid={route.params.hid} />}
+        {route.name === "handover"    && <HandoverScreen lang={lang} hid={route.params.hid} />}
+        {route.name === "staff"       && <StaffScreen lang={lang} />}
+        {route.name === "reminders"   && <RemindersScreen lang={lang} />}
+        {route.name === "maintenance" && <MaintenanceScreen lang={lang} />}
+        {route.name === "fleet"       && <FleetScreen lang={lang} />}
+        {route.name === "bills"       && <BillsScreen lang={lang} />}
+        {route.name === "events"      && <EventsScreen lang={lang} />}
         {/* Stubs */}
-        {["reminders","audit","maintenance","vendors","approvals","reports","assets","documents","users","settings"].includes(route.name) &&
+        {["audit","vendors","approvals","reports","assets","documents","users","settings","uniforms","storage","events-protocol"].includes(route.name) &&
           <StubByName lang={lang} name={route.name} />}
       </main>
     </div>
