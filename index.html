@@ -4,9 +4,6 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>MoFA Bahrain — House Management</title>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
-<meta http-equiv="Pragma" content="no-cache"/>
-<meta http-equiv="Expires" content="0"/>
 <link rel="stylesheet" href="public/tokens.css"/>
 <link rel="stylesheet" href="public/app.css"/>
 
@@ -53,6 +50,12 @@ window.dispatchEvent(new Event('three-ready'));
     parent.appendChild(s);
   });
 })();
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js");
+}
 </script>
 </body>
 </html>
