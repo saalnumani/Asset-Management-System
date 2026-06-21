@@ -46,6 +46,8 @@ const STUB_LABELS = {
   uniforms:         { en: "Uniforms",            ar: "الزي الرسمي" },
   storage:          { en: "Storage",             ar: "المستودع" },
   "events-protocol":{ en: "Events Protocol",    ar: "بروتوكول الفعاليات" },
+  fridge:           { en: "Fridge",             ar: "الثلاجة" },
+  grocery:          { en: "Grocery List",       ar: "قائمة التسوق" },
 };
 
 function StubByName({ lang, name }) {

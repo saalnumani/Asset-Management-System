@@ -62,7 +62,7 @@ function App() {
         {route.name === "bills"       && <BillsScreen lang={lang} />}
         {route.name === "events"      && <EventsScreen lang={lang} />}
         {/* Stubs */}
-        {["audit","vendors","approvals","reports","assets","documents","users","settings","uniforms","storage","events-protocol"].includes(route.name) &&
+        {["audit","vendors","approvals","reports","assets","documents","users","settings","uniforms","storage","events-protocol","fridge","grocery"].includes(route.name) &&
           <StubByName lang={lang} name={route.name} />}
       </main>
     </div>
