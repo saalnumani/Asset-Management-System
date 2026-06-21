@@ -1289,8 +1289,29 @@ a:focus-visible,
   /* Room screen: unset fixed height so panels stack naturally */
   .mob-grid-1[style*="calc(100vh"] { height: auto !important; }
 
-  /* Hero band — stack copy above CTA on mobile */
-  .hero-band { height: auto; min-height: 200px; display: flex; flex-direction: column; justify-content: flex-end; }
-  .hero-band .copy { position: static; transform: none; padding: 28px 24px 16px; }
-  .hero-band .cta { position: static; transform: none; padding: 0 24px 28px; }
+  /* Hero band — mobile reflow */
+  .hero-band {
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  /* Override the horizontal gradient with a full-coverage bottom-up overlay */
+  .hero-band .three-wrap > div:last-child {
+    background: linear-gradient(to top, rgba(15,26,51,0.92) 0%, rgba(15,26,51,0.55) 55%, rgba(15,26,51,0.15) 100%) !important;
+  }
+  .hero-band .copy {
+    position: static;
+    transform: none;
+    inset-inline-start: unset;
+    padding: 0 20px 8px;
+    pointer-events: auto;
+  }
+  .hero-band .copy h1 { font-size: 26px; }
+  .hero-band .cta {
+    position: static;
+    transform: none;
+    inset-inline-end: unset;
+    padding: 6px 20px 20px;
+  }
 }
