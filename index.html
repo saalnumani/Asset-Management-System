@@ -4,6 +4,9 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>MoFA Bahrain — House Management</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
 <link rel="stylesheet" href="public/tokens.css"/>
 <link rel="stylesheet" href="public/app.css"/>
 
@@ -31,24 +34,25 @@ window.OrbitControls = OrbitControls;
 window.dispatchEvent(new Event('three-ready'));
 </script>
 
-<script type="text/babel" src="src/i18n.jsx"></script>
-<script type="text/babel" src="src/data.jsx"></script>
-<script type="text/babel" src="src/data-postings.jsx"></script>
-<script type="text/babel" src="src/data-floors.jsx"></script>
-<script type="text/babel" src="src/data-assets-extended.jsx"></script>
-<script type="text/babel" src="src/data-gifts.jsx"></script>
-<script type="text/babel" src="src/data-maintenance.jsx"></script>
-<script type="text/babel" src="src/data-house.jsx"></script>
-<script type="text/babel" src="src/lib-permissions.jsx"></script>
-<script type="text/babel" src="src/lib-role-context.jsx"></script>
-<script type="text/babel" src="src/icons.jsx"></script>
-<script type="text/babel" src="src/three-kit.jsx"></script>
-<script type="text/babel" src="src/three-scenes.jsx"></script>
-<script type="text/babel" src="src/shell.jsx"></script>
-<script type="text/babel" src="src/screens-core.jsx"></script>
-<script type="text/babel" src="src/screens-room.jsx"></script>
-<script type="text/babel" src="src/screens-handover.jsx"></script>
-<script type="text/babel" src="src/screens-stub.jsx"></script>
-<script type="text/babel" src="src/app.jsx"></script>
+<script>
+(function() {
+  var v = "?v=" + Date.now();
+  var parent = document.currentScript.parentNode;
+  var files = [
+    "src/i18n.jsx","src/data.jsx","src/data-postings.jsx","src/data-floors.jsx",
+    "src/data-assets-extended.jsx","src/data-gifts.jsx","src/data-maintenance.jsx",
+    "src/data-house.jsx","src/lib-permissions.jsx","src/lib-role-context.jsx",
+    "src/icons.jsx","src/three-kit.jsx","src/three-scenes.jsx","src/shell.jsx",
+    "src/screens-core.jsx","src/screens-room.jsx","src/screens-handover.jsx",
+    "src/screens-stub.jsx","src/app.jsx"
+  ];
+  files.forEach(function(f) {
+    var s = document.createElement("script");
+    s.type = "text/babel";
+    s.src = f + v;
+    parent.appendChild(s);
+  });
+})();
+</script>
 </body>
 </html>
